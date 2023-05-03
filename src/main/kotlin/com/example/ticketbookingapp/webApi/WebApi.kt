@@ -1,5 +1,6 @@
 ﻿package com.example.ticketbookingapp.webApi
 
+import com.example.ticketbookingapp.dataTransferObject.MovieScreeningDto
 import com.example.ticketbookingapp.dataTransferObject.ScreeningSelectionRequestDto
 import com.example.ticketbookingapp.dataTransferObject.ScreeningSelectionResponseDto
 import com.example.ticketbookingapp.service.MovieScreeningService
@@ -23,6 +24,10 @@ class WebApi(private val movieScreeningService: MovieScreeningService) {
             dto.offset, dto.limit
         )
 
-        return ScreeningSelectionResponseDto(list, count)
+        return ScreeningSelectionResponseDto(
+            list.map { e ->
+                MovieScreeningDto(e.id, e.movie.title, starts = e.timeOfStart, ends = e.timeOfEnd)
+            },
+            count)
     }
 }
