@@ -3,7 +3,12 @@
 import com.example.ticketbookingapp.domain.*
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.time.temporal.ChronoUnit
+import java.time.temporal.TemporalUnit
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 @Service
 class DatabaseInitializationService(
@@ -70,21 +75,12 @@ class DatabaseInitializationService(
     }
 
     private fun initializeScreening(screeningRoom: ScreeningRoom, movie: Movie, hour: Int): MovieScreening {
-        val dateOfStart: Date
-        val dateOfEnd: Date
-        with (Calendar.getInstance()){
-            set(Calendar.YEAR, 2000);
-            set(Calendar.MONTH, Calendar.JANUARY);
-            set(Calendar.DAY_OF_MONTH, 1);
-            set(Calendar.HOUR, hour)
-            dateOfStart = time
+        val instantOfStart = LocalDateTime.of(2000, 1, 1, hour, 0, 0)
+            .toInstant(ZoneOffset.UTC)
+        val commercialsLength = 30
+        val instantOfEnd = instantOfStart.plusSeconds((commercialsLength + movie.lengthInMinutes).toLong() * 60)
 
-            val commercialsLength = 30
-            add(Calendar.MINUTE, movie.lengthInMinutes + commercialsLength)
-            dateOfEnd = time
-        }
-
-        return MovieScreening(movie, screeningRoom, dateOfStart, dateOfEnd)
+        return MovieScreening(movie, screeningRoom, instantOfStart, instantOfEnd)
             .let { movieScreeningRepository.save(it) }
     }
 }

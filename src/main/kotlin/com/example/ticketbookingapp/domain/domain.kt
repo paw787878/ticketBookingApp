@@ -2,7 +2,7 @@
 
 import jakarta.persistence.*
 import org.springframework.data.jpa.repository.JpaRepository
-import java.util.Date
+import java.time.Instant
 
 
 // TODO_PAWEL move to separate files
@@ -38,8 +38,8 @@ class MovieScreening(
     val movie: Movie,
     @ManyToOne(fetch = FetchType.LAZY)
     val screeningRoom: ScreeningRoom,
-    val timeOfStart: Date,
-    val timeOfEnd: Date,
+    val timeOfStart: Instant,
+    val timeOfEnd: Instant,
     @Id @GeneratedValue
     val id: Long = 0,
 )
@@ -54,7 +54,7 @@ class Reservation(
     // TODO_PAWEL chyba jeszcze rodzaj miejsca
     @ManyToMany
     val seats: Set<Seat>,
-    val expirationDate: Date,
+    val expirationDate: Instant,
     @Id @GeneratedValue
     val id: Long = 0,
 )
