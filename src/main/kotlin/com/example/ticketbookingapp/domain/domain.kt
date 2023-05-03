@@ -1,7 +1,11 @@
 ﻿package com.example.ticketbookingapp.domain
 
 import jakarta.persistence.*
+import org.springframework.data.jpa.repository.JpaRepository
 import java.util.Date
+
+
+// TODO_PAWEL move to separate files
 
 @Embeddable
 class User(
@@ -16,12 +20,16 @@ class Movie(
     val id: Long = 0,
 )
 
+interface MovieRepository : JpaRepository<Movie, Long>
+
 @Entity
 class ScreeningRoom(
     val name: String,
     @Id @GeneratedValue
     val id: Long = 0,
 )
+
+interface ScreeningRoomRepository : JpaRepository<ScreeningRoom, Long>
 
 @Entity
 class MovieScreening(
@@ -35,6 +43,8 @@ class MovieScreening(
     val id: Long = 0,
 )
 
+interface MovieScreeningRepository : JpaRepository<MovieScreening, Long>
+
 @Entity
 class Reservation(
     val user: User,
@@ -46,6 +56,8 @@ class Reservation(
     @Id @GeneratedValue
     val id: Long = 0,
 )
+
+interface ReservationRepository : JpaRepository<Reservation, Long>
 
 @Entity
 class Seat(
@@ -60,3 +72,5 @@ class Seat(
     @ManyToOne(fetch = FetchType.LAZY)
     var seatToRight: Seat? = null
 }
+
+interface SeatRepository : JpaRepository<Seat, Long>
