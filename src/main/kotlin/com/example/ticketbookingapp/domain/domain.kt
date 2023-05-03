@@ -63,7 +63,8 @@ interface ReservationRepository : JpaRepository<Reservation, Long>
 class Seat(
     @ManyToOne(fetch = FetchType.LAZY)
     val screeningRoom: ScreeningRoom,
-    val name: String,
+    val rowName: String,
+    val columnName: String,
     @Id @GeneratedValue
     val id: Long = 0,
 ){
