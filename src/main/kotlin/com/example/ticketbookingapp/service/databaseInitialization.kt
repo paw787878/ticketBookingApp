@@ -5,10 +5,6 @@ import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 import java.time.ZoneOffset
-import java.time.temporal.ChronoUnit
-import java.time.temporal.TemporalUnit
-import java.util.*
-import java.util.concurrent.TimeUnit
 
 @Service
 class DatabaseInitializationService(
