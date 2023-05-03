@@ -50,6 +50,7 @@ class Reservation(
     val user: User,
     @ManyToOne(fetch = FetchType.LAZY)
     val movieScreening: MovieScreening,
+    // TODO_PAWEL chyba jeszcze rodzaj miejsca
     @ManyToMany
     val seats: Set<Seat>,
     val expirationDate: Date,
