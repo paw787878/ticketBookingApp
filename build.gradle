@@ -6,6 +6,13 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.7.22'
     id 'org.jetbrains.kotlin.plugin.spring' version '1.7.22'
     id 'org.jetbrains.kotlin.plugin.jpa' version '1.7.22'
+    id "org.jetbrains.kotlin.plugin.allopen" version "1.8.21"
+}
+
+// TODO_PAWEL add test
+allOpen {
+    // kotlin.plugin.spring already opens typical spring annotations
+    annotation("javax.persistence.Entity")
 }
 
 group = 'com.example'
