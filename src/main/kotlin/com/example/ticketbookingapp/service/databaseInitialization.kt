@@ -14,7 +14,7 @@ class DatabaseInitializationService(
     private val movieScreeningRepository: MovieScreeningRepository
 ) {
     // TODO_PAWEL i think it needs to specify some exceptions or esle it is wrong
-    @Transactional
+    @Transactional(rollbackOn = [Exception::class])
     fun initializeDatabase() {
         val room1 = initializeRoom("room 1", 10, 10)
         val room2 = initializeRoom("room 2", 15, 15)

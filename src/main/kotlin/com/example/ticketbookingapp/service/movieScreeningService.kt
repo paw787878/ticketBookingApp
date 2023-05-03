@@ -19,7 +19,7 @@ class MovieScreeningService(
     @PersistenceContext
     private lateinit var entityManager: EntityManager
 
-    @Transactional
+    @Transactional(rollbackOn = [Exception::class])
     fun getScreeningsInPeriod(
         beginningOfPeriod: Instant,
         endOfPeriod: Instant,
