@@ -3,9 +3,9 @@
 import com.example.ticketbookingapp.domain.MovieScreening
 import com.example.ticketbookingapp.domain.MovieScreeningRepository
 import com.example.ticketbookingapp.domain.MovieScreening_
+import com.example.ticketbookingapp.domain.Movie_
 import jakarta.persistence.EntityManager
 import jakarta.persistence.PersistenceContext
-import jakarta.persistence.criteria.CriteriaBuilder
 import jakarta.persistence.criteria.CriteriaQuery
 import jakarta.persistence.criteria.Root
 import jakarta.transaction.Transactional
@@ -26,28 +26,29 @@ class MovieScreeningService(
         offset: Int,
         limit: Int
     ): Pair<List<MovieScreening>, Long> {
+
         val cb = entityManager.criteriaBuilder
 
-        fun <T> addWhere(
-            criteria: CriteriaQuery<T>,
-            i: Root<MovieScreening>,
-        ) {
-            criteria
-                .where(
-                    cb.and(
-                        cb.greaterThan(i.get(MovieScreening_.timeOfStart), beginningOfPeriod),
-                        cb.lessThan(i.get(MovieScreening_.timeOfEnd), endOfPeriod)
-                    )
+        fun <T> CriteriaQuery<T>.addWhereInInterval(i: Root<MovieScreening>) =
+            where(
+                cb.and(
+                    cb.greaterThan(i.get(MovieScreening_.timeOfStart), beginningOfPeriod),
+                    cb.lessThan(i.get(MovieScreening_.timeOfEnd), endOfPeriod)
                 )
-        }
+            )
 
         val list: List<MovieScreening> = run {
             val criteria = cb.createQuery(MovieScreening::class.java)
             val i = criteria.from(MovieScreening::class.java)
 
-            criteria.select(i)
-            addWhere(
-                criteria, i)
+            criteria
+                .select(i)
+                .addWhereInInterval(i)
+                .orderBy(
+                    cb.asc(i.get(MovieScreening_.movie).get(Movie_.title)),
+                    cb.asc(i.get(MovieScreening_.timeOfStart))
+                )
+
             val query = entityManager.createQuery(criteria)
             query.apply {
                 firstResult = offset
@@ -56,13 +57,14 @@ class MovieScreeningService(
             query.resultList
         }
 
-        val count = kotlin.run {
+        val count = run {
             val criteria = cb.createQuery(Long::class.java)
             val i = criteria.from(MovieScreening::class.java)
 
-            criteria.select(cb.count(i))
-            addWhere(
-                criteria.select(cb.count(i)), i)
+            criteria
+                .select(cb.count(i))
+                .addWhereInInterval(i)
+
             val query = entityManager.createQuery(criteria)
             query.singleResult
         }
