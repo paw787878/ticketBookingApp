@@ -2,6 +2,7 @@
 
 import com.example.ticketbookingapp.domain.MovieScreening
 import com.example.ticketbookingapp.domain.MovieScreeningRepository
+import com.example.ticketbookingapp.domain.MovieScreening_
 import jakarta.persistence.EntityManager
 import jakarta.persistence.PersistenceContext
 import jakarta.transaction.Transactional
@@ -22,8 +23,8 @@ class MovieScreeningService(
         criteria
             .select(i)
             .where(cb.and(
-                cb.greaterThan(i.get("timeOfStart"), beginningOfPeriod),
-                cb.lessThan(i.get("timeOfEnd"), endOfPeriod)
+                cb.greaterThan(i.get(MovieScreening_.timeOfStart), beginningOfPeriod),
+                cb.lessThan(i.get(MovieScreening_.timeOfEnd), endOfPeriod)
             ))
         val query = entityManager.createQuery(criteria)
         return query.resultList
