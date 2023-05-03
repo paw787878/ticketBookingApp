@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*
 @CrossOrigin(origins= ["*"])
 class WebApi(private val movieScreeningService: MovieScreeningService) {
 
+    // TODO_PAWEL sort and add paging
     @GetMapping("/screenings", consumes = ["application/json"])
     fun getScreeningsInSelectedTime(dto: ScreeningSelectionDTO): List<MovieScreening> {
         val result = movieScreeningService.getScreeningsInPeriod(dto.minimalStartTime, dto.maximalEndTime)
