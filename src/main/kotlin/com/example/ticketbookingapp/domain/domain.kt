@@ -16,6 +16,7 @@ class User(
 @Entity
 class Movie(
     val title: String,
+    val lengthInMinutes: Int,
     @Id @GeneratedValue
     val id: Long = 0,
 )
