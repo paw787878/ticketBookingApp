@@ -5,14 +5,17 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.0'
     id 'org.jetbrains.kotlin.jvm' version '1.7.22'
     id 'org.jetbrains.kotlin.plugin.spring' version '1.7.22'
+    id "org.jetbrains.kotlin.plugin.noarg" version "1.8.21"
+    // TODO_PAWEL
+    // check if it supports setting all open
     id 'org.jetbrains.kotlin.plugin.jpa' version '1.7.22'
-    id "org.jetbrains.kotlin.plugin.allopen" version "1.8.21"
-}
 
-// TODO_PAWEL add test
-allOpen {
-    // kotlin.plugin.spring already opens typical spring annotations
-    annotation("javax.persistence.Entity")
+//    id "org.jetbrains.kotlin.plugin.allopen" version "1.8.21"
+}
+noArg {
+  annotation("jakarta.persistence.Entity")
+  annotation("jakarta.persistence.Embeddable")
+  annotation("jakarta.persistence.MappedSuperclass")
 }
 
 group = 'com.example'
