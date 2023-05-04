@@ -49,6 +49,7 @@ class MovieScreening(
     val timeOfEnd: Instant,
     @Id @GeneratedValue
     val id: Long = 0,
+    // TODO_PAWEL this does not modify in database, investigate
     @Version
     val version: Int = 0,
 )
