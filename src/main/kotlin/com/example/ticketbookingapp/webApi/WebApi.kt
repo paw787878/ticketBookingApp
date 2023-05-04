@@ -1,8 +1,10 @@
 ﻿package com.example.ticketbookingapp.webApi
 
 import com.example.ticketbookingapp.dataTransferObject.*
+import com.example.ticketbookingapp.service.MovieReservationService
 import com.example.ticketbookingapp.service.MovieScreeningSeatsService
 import com.example.ticketbookingapp.service.MovieScreeningService
+import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*
 class WebApi(
     private val movieScreeningService: MovieScreeningService,
     private val seatsService: MovieScreeningSeatsService,
+    private val movieReservationService: MovieReservationService,
 ) {
 
     // TODO_PAWEL sort and add paging
@@ -37,5 +40,11 @@ class WebApi(
     // TODO_PAWEL handle errors in transactions
     fun getScreeningInfo(dto: ScreeningInfoRequestDto): MovieScreeningAndRoomDto {
         return seatsService.getSeatInfos(dto.screeningId)
+    }
+
+    @PostMapping("/createReservation", consumes = ["application/json"])
+    @ResponseStatus(HttpStatus.CREATED)
+    fun createReservation(@RequestBody reservationData: ReservationRequestDto): ReservationResponseDto {
+        return movieReservationService.createReservation(reservationData)
     }
 }

@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository
 import java.time.Instant
 
 
+// TODO_PAWEL not null and such
+
 // TODO_PAWEL move to separate files
 
 @Embeddable
@@ -28,7 +30,11 @@ class ScreeningRoom(
     val name: String,
     @Id @GeneratedValue
     val id: Long = 0,
-)
+){
+    // TODO_PAWEL can you use metadata model here?
+    @OneToMany(mappedBy = "screeningRoom")
+    val seats: MutableSet<Seat> = HashSet()
+}
 
 interface ScreeningRoomRepository : JpaRepository<ScreeningRoom, Long>
 
@@ -43,6 +49,8 @@ class MovieScreening(
     val timeOfEnd: Instant,
     @Id @GeneratedValue
     val id: Long = 0,
+    @Version
+    val version: Int = 0,
 )
 
 interface MovieScreeningRepository : JpaRepository<MovieScreening, Long>
@@ -75,6 +83,10 @@ class Seat(
     var seatToLeft: Seat? = null
     @ManyToOne(fetch = FetchType.LAZY)
     var seatToRight: Seat? = null
+
+    init {
+        screeningRoom.seats.add(this)
+    }
 }
 
 interface SeatRepository : JpaRepository<Seat, Long>

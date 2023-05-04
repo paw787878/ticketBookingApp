@@ -1,6 +1,9 @@
 ﻿package com.example.ticketbookingapp.service
 
+import com.example.ticketbookingapp.dataTransferObject.ReservationRequestDto
 import com.example.ticketbookingapp.domain.*
+import jakarta.persistence.EntityManager
+import jakarta.persistence.PersistenceContext
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
@@ -11,8 +14,13 @@ class DatabaseInitializationService(
     private val movieRepository: MovieRepository,
     private val screeningRoomRepository: ScreeningRoomRepository,
     private val seatRepository: SeatRepository,
-    private val movieScreeningRepository: MovieScreeningRepository
+    private val movieScreeningRepository: MovieScreeningRepository,
+    private val reservationService: MovieReservationService,
+    private val seatsService: MovieScreeningSeatsService,
 ) {
+    @PersistenceContext
+    private lateinit var entityManager: EntityManager
+
     // TODO_PAWEL i think it needs to specify some exceptions or esle it is wrong
     @Transactional(rollbackOn = [Exception::class])
     fun initializeDatabase() {
@@ -24,14 +32,44 @@ class DatabaseInitializationService(
         val movie2 = initializeMovie("The Shawshank Redemption", 120)
         val movie3 = initializeMovie("The Lord of the Rings: The Return of the King", 140)
 
-        initializeScreening(room1, movie1, 10)
-        initializeScreening(room1, movie2, 20)
+        val screening_1_1 = initializeScreening(room1, movie1, 10)
+        val screening_1_2 = initializeScreening(room1, movie2, 20)
 
         initializeScreening(room2, movie2, 9)
         initializeScreening(room2, movie3, 21)
 
         initializeScreening(room3, movie3, 11)
         initializeScreening(room3, movie1, 19)
+
+        // to make sure ids of movie screenings are accessible
+        entityManager.flush()
+
+        reservationService.createReservation(ReservationRequestDto(
+            screening_1_1.id,
+            "Name11",
+            "Surname11",
+            screening_1_1.screeningRoom.seats
+                .filter { seat -> seat.columnName == "3" }
+                .map { e -> e.id }
+        ))
+
+        reservationService.createReservation(ReservationRequestDto(
+            screening_1_1.id,
+            "Name11_1",
+            "Surname11_1",
+            screening_1_1.screeningRoom.seats
+                .filter { seat -> seat.columnName == "6" }
+                .map { e -> e.id }
+        ))
+
+        reservationService.createReservation(ReservationRequestDto(
+            screening_1_2.id,
+            "Name12_1",
+            "Surname12_1",
+            screening_1_2.screeningRoom.seats
+                .filter { seat -> seat.columnName == "7" }
+                .map { e -> e.id }
+        ))
     }
 
     private fun initializeRoom(roomName: String, numberOfRows: Int, numberOfColumns: Int): ScreeningRoom {

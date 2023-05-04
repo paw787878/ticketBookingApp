@@ -17,21 +17,6 @@ class MovieScreeningSeatsService(private val movieScreeningRepository: MovieScre
 
     // TODO_PAWEL shouldl those be read only transactions?
     @Transactional(rollbackOn = [Exception::class])
-    fun getAllSeats(movieScreening: MovieScreening): List<Seat> {
-        val cb = entityManager.criteriaBuilder
-        val criteria = cb.createQuery(Seat::class.java)
-
-        val seatRoot = criteria.from(Seat::class.java)
-        val roomRoot = seatRoot.join(Seat_.screeningRoom)
-        criteria
-            .select(seatRoot)
-            .where(cb.equal(roomRoot, movieScreening.screeningRoom))
-
-        val query = entityManager.createQuery(criteria)
-        return query.resultList
-    }
-
-    @Transactional(rollbackOn = [Exception::class])
     fun getReservedSeats(movieScreening: MovieScreening): List<Seat> {
         val cb = entityManager.criteriaBuilder
         val criteria = cb.createQuery(Seat::class.java)
@@ -55,7 +40,7 @@ class MovieScreeningSeatsService(private val movieScreeningRepository: MovieScre
     @Transactional(rollbackOn = [Exception::class])
     fun getSeatInfos(movieScreening: MovieScreening): MovieScreeningAndRoomDto {
         val reservedSeats = getReservedSeats(movieScreening).toSet()
-        val allSeats = getAllSeats(movieScreening)
+        val allSeats = movieScreening.screeningRoom.seats
 
         // TODO_PAWEL i could do this work after closing transaction
         val seatInfos = allSeats.map { seat ->

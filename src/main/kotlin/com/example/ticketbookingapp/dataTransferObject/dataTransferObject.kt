@@ -2,7 +2,10 @@
 
 import com.example.ticketbookingapp.domain.Movie
 import com.example.ticketbookingapp.domain.ScreeningRoom
+import com.example.ticketbookingapp.domain.Seat
+import com.fasterxml.jackson.annotation.JsonProperty
 import org.springframework.format.annotation.DateTimeFormat
+import java.math.BigDecimal
 import java.time.Instant
 
 data class ScreeningSelectionRequestDto(
@@ -41,4 +44,18 @@ data class MovieScreeningAndRoomDto(
     val movieScreening: MovieScreeningDto,
     val roomName: String,
     val seats: List<SeatDto>,
+)
+
+// TODO_PAWEL maybe debug info, like what time it is and what delay to use
+open class ReservationRequestDto(
+    val movieScreeningId: Long,
+    val name: String,
+    val surname: String,
+    val seats: List<Long>,
+)
+
+data class ReservationResponseDto(
+    // TODO_PAWEL is it good for numbers?
+    val totalAmountToPay: BigDecimal,
+    val reservationExpirationTime: Instant,
 )
