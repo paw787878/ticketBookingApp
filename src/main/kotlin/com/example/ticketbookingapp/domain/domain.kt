@@ -32,6 +32,7 @@ class ScreeningRoom(
 
 interface ScreeningRoomRepository : JpaRepository<ScreeningRoom, Long>
 
+// TODO_PAWEL czy nadpisywac equals?
 @Entity
 class MovieScreening(
     @ManyToOne(fetch = FetchType.LAZY)
