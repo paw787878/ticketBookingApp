@@ -1,8 +1,7 @@
 ﻿package com.example.ticketbookingapp.webApi
 
-import com.example.ticketbookingapp.dataTransferObject.MovieScreeningDto
-import com.example.ticketbookingapp.dataTransferObject.ScreeningSelectionRequestDto
-import com.example.ticketbookingapp.dataTransferObject.ScreeningSelectionResponseDto
+import com.example.ticketbookingapp.dataTransferObject.*
+import com.example.ticketbookingapp.service.MovieScreeningSeatsService
 import com.example.ticketbookingapp.service.MovieScreeningService
 import org.springframework.web.bind.annotation.*
 
@@ -13,10 +12,13 @@ import org.springframework.web.bind.annotation.*
 )
 // TODO_PAWEL should it be oher?
 @CrossOrigin(origins = ["*"])
-class WebApi(private val movieScreeningService: MovieScreeningService) {
+class WebApi(
+    private val movieScreeningService: MovieScreeningService,
+    private val seatsService: MovieScreeningSeatsService,
+) {
 
     // TODO_PAWEL sort and add paging
-    @GetMapping("/screenings", consumes = ["application/json"])
+    @GetMapping("/screenings")
     fun getScreeningsInSelectedTime(dto: ScreeningSelectionRequestDto): ScreeningSelectionResponseDto {
         val (list, count) = movieScreeningService.getScreeningsInPeriod(
             dto.minimalStartTime,
@@ -29,5 +31,11 @@ class WebApi(private val movieScreeningService: MovieScreeningService) {
                 MovieScreeningDto(e.id, e.movie.title, starts = e.timeOfStart, ends = e.timeOfEnd)
             },
             count)
+    }
+
+    @GetMapping("/screening")
+    // TODO_PAWEL handle errors in transactions
+    fun getScreeningInfo(dto: ScreeningInfoRequestDto): MovieScreeningAndRoomDto {
+        return seatsService.getSeatInfos(dto.screeningId)
     }
 }
