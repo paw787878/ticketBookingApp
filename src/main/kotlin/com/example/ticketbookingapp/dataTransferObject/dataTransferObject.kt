@@ -47,11 +47,18 @@ data class MovieScreeningAndRoomDto(
 )
 
 // TODO_PAWEL maybe debug info, like what time it is and what delay to use
+// TODO_PAWEL does it need to beopen?
 open class ReservationRequestDto(
     val movieScreeningId: Long,
     val name: String,
     val surname: String,
-    val seats: List<Long>,
+    val seats: List<SeatTicketTypeDto>,
+)
+
+// TODO_PAWEL does it need to beopen?
+open class SeatTicketTypeDto(
+    val seatId: Long,
+    val ticketType: Long,
 )
 
 data class ReservationResponseDto(

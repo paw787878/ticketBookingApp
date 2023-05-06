@@ -15,6 +15,8 @@ class MovieReservationService(
     private val movieScreeningRepository: MovieScreeningRepository,
     private val seatRepository: SeatRepository,
     private val reservationRepository: ReservationRepository,
+    private val ticketTypeRepository: TicketTypeRepository,
+    private val reservationSeatRepository: ReservationSeatRepository,
 ) {
 
     @PersistenceContext
@@ -30,9 +32,9 @@ class MovieReservationService(
         val reservedSeats = screeningSeatsService.getReservedSeats(movieScreening).toSet()
 
         val chosenSeats = buildSet {
-            for (seatId in reservationData.seats) {
+            for (seatTicket in reservationData.seats) {
                 // TODO_PAWEL handle fail
-                val newSeat = seatRepository.findById(seatId).get()
+                val newSeat = seatRepository.findById(seatTicket.seatId).get()
                 // TODO_PAWEL handle fail
                 require(!contains(newSeat))
 
@@ -67,13 +69,21 @@ class MovieReservationService(
         val reservation = Reservation(
             User(reservationData.name, reservationData.surname),
             movieScreening,
-            chosenSeats,
             // TODO_PAWEL is this time ok?
             movieScreening.timeOfStart
         )
             .let { reservationRepository.save(it) }
 
-        // TODO_PAWEL calculate amount to pay
-        return ReservationResponseDto(0.toBigDecimal(), reservation.expirationDate)
+        var amountToPay = 0.toBigDecimal()
+        for (ticketSeat in reservationData.seats) {
+            // TODO_PAWEL
+            val ticketType = ticketTypeRepository.findById(ticketSeat.ticketType).get()
+            val seat = seatRepository.findById(ticketSeat.seatId).get()
+            ticketTypeRepository
+            ReservationSeat(reservation, seat, ticketType).let { reservationSeatRepository.save(it) }
+            amountToPay += ticketType.price
+        }
+
+        return ReservationResponseDto(amountToPay, reservation.expirationDate)
     }
 }

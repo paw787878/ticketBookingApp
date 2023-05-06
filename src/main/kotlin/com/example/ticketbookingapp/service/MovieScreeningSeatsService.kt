@@ -21,9 +21,11 @@ class MovieScreeningSeatsService(private val movieScreeningRepository: MovieScre
         val cb = entityManager.criteriaBuilder
         val criteria = cb.createQuery(Seat::class.java)
 
-        val reservationRoot = criteria.from(Reservation::class.java)
+        val reservationSeatRoot = criteria.from(ReservationSeat::class.java)
+        val seatRoot = reservationSeatRoot.join(ReservationSeat_.seat)
+        val reservationRoot = reservationSeatRoot.join(ReservationSeat_.reservation)
         val screeningsRoot = reservationRoot.join(Reservation_.movieScreening)
-        val seatRoot = reservationRoot.join(Reservation_.seats)
+
         criteria
             .select(seatRoot)
             .where(cb.equal(screeningsRoot, movieScreening))

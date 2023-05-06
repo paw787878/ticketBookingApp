@@ -2,6 +2,7 @@
 
 import jakarta.persistence.*
 import org.springframework.data.jpa.repository.JpaRepository
+import java.math.BigDecimal
 import java.time.Instant
 
 
@@ -61,16 +62,38 @@ interface MovieScreeningRepository : JpaRepository<MovieScreening, Long>
 class Reservation(
     val user: User,
     @ManyToOne(fetch = FetchType.LAZY)
+    // TODO_PAWEL why not used?
     val movieScreening: MovieScreening,
-    // TODO_PAWEL chyba jeszcze rodzaj miejsca
-    @ManyToMany
-    val seats: Set<Seat>,
     val expirationDate: Instant,
     @Id @GeneratedValue
     val id: Long = 0,
 )
 
 interface ReservationRepository : JpaRepository<Reservation, Long>
+
+@Entity
+class ReservationSeat(
+    @ManyToOne(fetch = FetchType.LAZY)
+    val reservation: Reservation,
+    @ManyToOne(fetch = FetchType.LAZY)
+    val seat: Seat,
+    @ManyToOne(fetch = FetchType.LAZY)
+    val ticketType: TicketType,
+    @Id @GeneratedValue
+    val id: Long = 0,
+)
+
+interface ReservationSeatRepository : JpaRepository<ReservationSeat, Long>
+
+@Entity
+class TicketType(
+    val name: String,
+    val price: BigDecimal,
+    @Id @GeneratedValue
+    val id: Long = 0,
+)
+
+interface TicketTypeRepository : JpaRepository<TicketType, Long>
 
 @Entity
 class Seat(

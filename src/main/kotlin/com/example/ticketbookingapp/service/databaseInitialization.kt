@@ -1,11 +1,13 @@
 ﻿package com.example.ticketbookingapp.service
 
 import com.example.ticketbookingapp.dataTransferObject.ReservationRequestDto
+import com.example.ticketbookingapp.dataTransferObject.SeatTicketTypeDto
 import com.example.ticketbookingapp.domain.*
 import jakarta.persistence.EntityManager
 import jakarta.persistence.PersistenceContext
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
+import java.math.BigDecimal
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 
@@ -17,6 +19,7 @@ class DatabaseInitializationService(
     private val movieScreeningRepository: MovieScreeningRepository,
     private val reservationService: MovieReservationService,
     private val seatsService: MovieScreeningSeatsService,
+    private val ticketTypeRepository: TicketTypeRepository,
 ) {
     @PersistenceContext
     private lateinit var entityManager: EntityManager
@@ -24,6 +27,10 @@ class DatabaseInitializationService(
     // TODO_PAWEL i think it needs to specify some exceptions or esle it is wrong
     @Transactional(rollbackOn = [Exception::class])
     fun initializeDatabase() {
+        val adultTicketType = initializeTicketType("adult", BigDecimal("25"))
+        val studentTicketType = initializeTicketType("student", BigDecimal("18"))
+        val childTicketType = initializeTicketType("child", BigDecimal("12.5"))
+
         val room1 = initializeRoom("room 1", 10, 10)
         val room2 = initializeRoom("room 2", 15, 15)
         val room3 = initializeRoom("room 3", 20, 20)
@@ -50,7 +57,7 @@ class DatabaseInitializationService(
             "Surname11",
             screening_1_1.screeningRoom.seats
                 .filter { seat -> seat.columnName == "3" }
-                .map { e -> e.id }
+                .map { e -> SeatTicketTypeDto(e.id, studentTicketType.id) }
         ))
 
         reservationService.createReservation(ReservationRequestDto(
@@ -59,7 +66,7 @@ class DatabaseInitializationService(
             "Surname11_1",
             screening_1_1.screeningRoom.seats
                 .filter { seat -> seat.columnName == "6" }
-                .map { e -> e.id }
+                .map { e -> SeatTicketTypeDto(e.id, adultTicketType.id) }
         ))
 
         reservationService.createReservation(ReservationRequestDto(
@@ -68,8 +75,12 @@ class DatabaseInitializationService(
             "Surname12_1",
             screening_1_2.screeningRoom.seats
                 .filter { seat -> seat.columnName == "7" }
-                .map { e -> e.id }
+                .map { e -> SeatTicketTypeDto(e.id, childTicketType.id) }
         ))
+    }
+
+    private fun initializeTicketType(name: String, price: BigDecimal): TicketType {
+        return TicketType(name, price).let { ticketTypeRepository.save(it) }
     }
 
     private fun initializeRoom(roomName: String, numberOfRows: Int, numberOfColumns: Int): ScreeningRoom {
