@@ -35,7 +35,7 @@ class DatabaseInitializationService(
         val room2 = initializeRoom("room 2", 15, 15)
         val room3 = initializeRoom("room 3", 20, 20)
 
-        val movie1 = initializeMovie("Schindler's List", 100)
+        val movie1 = initializeMovie("Schindler's List ęóąśłżźćń", 100)
         val movie2 = initializeMovie("The Shawshank Redemption", 120)
         val movie3 = initializeMovie("The Lord of the Rings: The Return of the King", 140)
 

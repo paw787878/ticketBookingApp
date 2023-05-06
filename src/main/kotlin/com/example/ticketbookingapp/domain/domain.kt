@@ -17,13 +17,13 @@ import java.time.Instant
 @Embeddable
 class User(
     @Column(nullable = false)
-    @get:Pattern(regexp="[a-zA-Z]*", message="Must contain only letters")
+    @get:Pattern(regexp="[a-zA-ZAęóąśłżźćńĘÓĄŚŁŻŹĆŃ]*", message="Must contain only letters")
     @get:Size(min = 3, max = 255)
     @get:FirstLetterIsCapital
     var name: String,
 
     @Column(nullable = false)
-    @get:Pattern(regexp="[a-zA-Z-]*", message="Must contain only letters and hyphens")
+    @get:Pattern(regexp="[a-zA-ZAęóąśłżźćńĘÓĄŚŁŻŹĆŃ-]*", message="Must contain only letters and hyphens")
     @get:CapitalizedWordOrTwoCapitalizedWordsWithHyphen
     @get:Size(min = 3, max = 255)
     var surname: String,
