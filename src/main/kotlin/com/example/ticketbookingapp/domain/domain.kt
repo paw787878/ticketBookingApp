@@ -51,6 +51,7 @@ class MovieScreening(
     val id: Long = 0,
     // TODO_PAWEL this does not modify in database, investigate
     @Version
+    // TODO_PAWEL renaming does not help
     val version: Int = 0,
 )
 

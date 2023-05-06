@@ -22,8 +22,9 @@ class MovieReservationService(
 
     @Transactional(rollbackOn = [Exception::class])
     fun createReservation(reservationData: ReservationRequestDto): ReservationResponseDto {
+        // TODO_PAWEL what if null
         val movieScreening = movieScreeningRepository.findById(reservationData.movieScreeningId).get()
-        entityManager.refresh(movieScreening, LockModeType.OPTIMISTIC_FORCE_INCREMENT)
+        entityManager.lock(movieScreening, LockModeType.OPTIMISTIC_FORCE_INCREMENT)
 
         val roomSeats = movieScreening.screeningRoom.seats
         val reservedSeats = screeningSeatsService.getReservedSeats(movieScreening).toSet()
