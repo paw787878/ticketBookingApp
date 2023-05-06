@@ -53,8 +53,8 @@ class DatabaseInitializationService(
 
         reservationService.createReservation(ReservationRequestDto(
             screening_1_1.id,
-            "Name11",
-            "Surname11",
+            "Name",
+            "Surname",
             screening_1_1.screeningRoom.seats
                 .filter { seat -> seat.columnName == "3" }
                 .map { e -> SeatTicketTypeDto(e.id, studentTicketType.id) }
@@ -62,8 +62,8 @@ class DatabaseInitializationService(
 
         reservationService.createReservation(ReservationRequestDto(
             screening_1_1.id,
-            "Name11_1",
-            "Surname11_1",
+            "Namee",
+            "Surnamee",
             screening_1_1.screeningRoom.seats
                 .filter { seat -> seat.columnName == "6" }
                 .map { e -> SeatTicketTypeDto(e.id, adultTicketType.id) }
@@ -71,8 +71,8 @@ class DatabaseInitializationService(
 
         reservationService.createReservation(ReservationRequestDto(
             screening_1_2.id,
-            "Name12_1",
-            "Surname12_1",
+            "Nameee",
+            "Surnameee",
             screening_1_2.screeningRoom.seats
                 .filter { seat -> seat.columnName == "7" }
                 .map { e -> SeatTicketTypeDto(e.id, childTicketType.id) }
