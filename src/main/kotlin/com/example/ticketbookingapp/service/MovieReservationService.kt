@@ -25,6 +25,7 @@ class MovieReservationService(
     @Transactional(rollbackOn = [Exception::class])
     fun createReservation(reservationData: ReservationRequestDto): ReservationResponseDto {
         require(reservationData.seats.isNotEmpty())
+        // TODO_PAWEL also handle ze max 15 minut przed seansem tylko mozna
         // TODO_PAWEL what if null
         val movieScreening = movieScreeningRepository.findById(reservationData.movieScreeningId).get()
         entityManager.lock(movieScreening, LockModeType.OPTIMISTIC_FORCE_INCREMENT)
