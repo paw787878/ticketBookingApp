@@ -1,5 +1,6 @@
 ﻿package com.example.ticketbookingapp.service
 
+import com.example.ticketbookingapp.Exceptions.*
 import com.example.ticketbookingapp.dataTransferObject.ReservationRequestDto
 import com.example.ticketbookingapp.dataTransferObject.ReservationResponseDto
 import com.example.ticketbookingapp.domain.*
@@ -25,7 +26,9 @@ class MovieReservationService(
 
     @Transactional(rollbackFor = [Exception::class])
     fun createReservation(reservationData: ReservationRequestDto): ReservationResponseDto {
-        require(reservationData.seats.isNotEmpty())
+        if (reservationData.seats.isEmpty()) {
+            throw ClientResponseExceptionEntityNoSeatsInReservation()
+        }
         // TODO_PAWEL also handle ze max 15 minut przed seansem tylko mozna
         val movieScreening = movieScreeningRepository.findByIdOrClientError(reservationData.movieScreeningId)
         entityManager.lock(movieScreening, LockModeType.OPTIMISTIC_FORCE_INCREMENT)
@@ -36,16 +39,21 @@ class MovieReservationService(
         val chosenSeats = buildSet {
             for (seatTicket in reservationData.seats) {
                 val newSeat = seatRepository.findByIdOrClientError(seatTicket.seatId)
-                // TODO_PAWEL handle fail
-                require(!contains(newSeat))
+                if (contains(newSeat)) {
+                    throw ClientResponseExceptionTwoSameSeatsInReservation(seatTicket.seatId)
+                }
 
                 add(newSeat)
             }
         }
 
         for (chosenSeat in chosenSeats) {
-            require(chosenSeat !in reservedSeats)
-            require(chosenSeat in roomSeats)
+            if (chosenSeat in reservedSeats) {
+                throw ClientResponseExceptionSelectedReservedSeat(chosenSeat.id)
+            }
+            if (chosenSeat !in roomSeats) {
+                throw ClientResponseExceptionSelectedSeatFromWrongScreeningRoom(chosenSeat.id)
+            }
             fun checkNeighbour(neighbour: Seat?) {
                 neighbour ?: return
 
@@ -54,11 +62,12 @@ class MovieReservationService(
 
                 // TODO_PAWEL this thorws
 
-                require(
-                    !(!isOrWillBeReserved(neighbour) &&
-                            isOrWillBeReserved(neighbour.seatToLeft) &&
-                            isOrWillBeReserved(neighbour.seatToRight))
-                )
+                if (!isOrWillBeReserved(neighbour) &&
+                    isOrWillBeReserved(neighbour.seatToLeft) &&
+                    isOrWillBeReserved(neighbour.seatToRight)
+                ) {
+                    throw ClientResponseExceptionWouldLeaveSingleSeatSurrounded(neighbour.id)
+                }
             }
 
             checkNeighbour(chosenSeat.seatToLeft)
