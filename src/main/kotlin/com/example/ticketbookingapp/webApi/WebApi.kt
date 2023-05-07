@@ -20,7 +20,6 @@ class WebApi(
     private val movieReservationService: MovieReservationService,
 ) {
 
-    // TODO_PAWEL sort and add paging
     @GetMapping("/screenings")
     fun getScreeningsInSelectedTime(dto: ScreeningSelectionRequestDto): ScreeningSelectionResponseDto {
         val (list, count) = movieScreeningService.getScreeningsInPeriod(

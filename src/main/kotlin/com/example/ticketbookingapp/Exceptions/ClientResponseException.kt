@@ -9,3 +9,12 @@ abstract class ClientResponseException() : RuntimeException() {
     override val message: String
         get() = messageImplementation()
 }
+
+class ClientResponseEntityIdIsWrong(val id: Long, val entityType: Class<*>) : ClientResponseException() {
+    override val responseStatus: HttpStatus
+        get() = HttpStatus.BAD_REQUEST
+
+    override fun messageImplementation(): String {
+        return "$id is wrong id for ${entityType.simpleName}"
+    }
+}

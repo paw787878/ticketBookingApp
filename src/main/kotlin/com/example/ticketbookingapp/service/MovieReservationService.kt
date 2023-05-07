@@ -3,6 +3,7 @@
 import com.example.ticketbookingapp.dataTransferObject.ReservationRequestDto
 import com.example.ticketbookingapp.dataTransferObject.ReservationResponseDto
 import com.example.ticketbookingapp.domain.*
+import com.example.ticketbookingapp.utils.findByIdOrClientError
 import jakarta.persistence.EntityManager
 import jakarta.persistence.LockModeType
 import jakarta.persistence.PersistenceContext
@@ -26,8 +27,7 @@ class MovieReservationService(
     fun createReservation(reservationData: ReservationRequestDto): ReservationResponseDto {
         require(reservationData.seats.isNotEmpty())
         // TODO_PAWEL also handle ze max 15 minut przed seansem tylko mozna
-        // TODO_PAWEL what if null
-        val movieScreening = movieScreeningRepository.findById(reservationData.movieScreeningId).get()
+        val movieScreening = movieScreeningRepository.findByIdOrClientError(reservationData.movieScreeningId)
         entityManager.lock(movieScreening, LockModeType.OPTIMISTIC_FORCE_INCREMENT)
 
         val roomSeats = movieScreening.screeningRoom.seats
@@ -35,8 +35,7 @@ class MovieReservationService(
 
         val chosenSeats = buildSet {
             for (seatTicket in reservationData.seats) {
-                // TODO_PAWEL handle fail
-                val newSeat = seatRepository.findById(seatTicket.seatId).get()
+                val newSeat = seatRepository.findByIdOrClientError(seatTicket.seatId)
                 // TODO_PAWEL handle fail
                 require(!contains(newSeat))
 
@@ -78,9 +77,8 @@ class MovieReservationService(
 
         var amountToPay = 0.toBigDecimal()
         for (ticketSeat in reservationData.seats) {
-            // TODO_PAWEL
-            val ticketType = ticketTypeRepository.findById(ticketSeat.ticketType).get()
-            val seat = seatRepository.findById(ticketSeat.seatId).get()
+            val ticketType = ticketTypeRepository.findByIdOrClientError(ticketSeat.ticketType)
+            val seat = seatRepository.findByIdOrClientError(ticketSeat.seatId)
             ticketTypeRepository
             ReservationSeat(reservation, seat, ticketType).let { reservationSeatRepository.save(it) }
             amountToPay += ticketType.price
