@@ -11,12 +11,19 @@ plugins {
     // check if it supports setting all open
     id 'org.jetbrains.kotlin.plugin.jpa' version '1.7.22'
 
-//    id "org.jetbrains.kotlin.plugin.allopen" version "1.8.21"
+    id "org.jetbrains.kotlin.plugin.allopen" version "1.8.21"
 }
+
 noArg {
   annotation("jakarta.persistence.Entity")
   annotation("jakarta.persistence.Embeddable")
   annotation("jakarta.persistence.MappedSuperclass")
+}
+
+allOpen {
+    annotation("jakarta.persistence.Entity")
+    annotation("jakarta.persistence.Embeddable")
+    annotation("jakarta.persistence.MappedSuperclass")
 }
 
 group = 'com.example'
