@@ -6,6 +6,7 @@ import com.example.ticketbookingapp.service.MovieScreeningSeatsService
 import com.example.ticketbookingapp.service.MovieScreeningService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
+import java.time.Instant
 
 @RestController
 @RequestMapping(
@@ -44,6 +45,6 @@ class WebApi(
     @PostMapping("/createReservation", consumes = ["application/json"])
     @ResponseStatus(HttpStatus.CREATED)
     fun createReservation(@RequestBody reservationData: ReservationRequestDto): ReservationResponseDto {
-        return movieReservationService.createReservation(reservationData)
+        return movieReservationService.createReservation(reservationData, Instant.now())
     }
 }

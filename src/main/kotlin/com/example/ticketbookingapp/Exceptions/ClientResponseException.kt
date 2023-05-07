@@ -34,3 +34,7 @@ class ClientResponseExceptionSelectedSeatFromWrongScreeningRoom(val id: Long) : 
 class ClientResponseExceptionWouldLeaveSingleSeatSurrounded(val id: Long) : ClientResponseException() {
     override fun messageImplementation() = "Seat with id $id would be surrounded by reserved seats"
 }
+
+class ClientResponseExceptionReservationIsPlacedTooLate(val timeInMinutes: Int) : ClientResponseException() {
+    override fun messageImplementation() = "You can book only until $timeInMinutes before screening starts"
+}

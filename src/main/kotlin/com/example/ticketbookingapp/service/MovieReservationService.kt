@@ -1,6 +1,7 @@
 ﻿package com.example.ticketbookingapp.service
 
 import com.example.ticketbookingapp.Exceptions.*
+import com.example.ticketbookingapp.config.CustomConfigProperties
 import com.example.ticketbookingapp.dataTransferObject.ReservationRequestDto
 import com.example.ticketbookingapp.dataTransferObject.ReservationResponseDto
 import com.example.ticketbookingapp.domain.*
@@ -10,6 +11,7 @@ import jakarta.persistence.LockModeType
 import jakarta.persistence.PersistenceContext
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.stereotype.Service
+import java.time.Instant
 
 @Service
 class MovieReservationService(
@@ -19,18 +21,30 @@ class MovieReservationService(
     private val reservationRepository: ReservationRepository,
     private val ticketTypeRepository: TicketTypeRepository,
     private val reservationSeatRepository: ReservationSeatRepository,
+    private val customConfigProperties: CustomConfigProperties,
 ) {
 
     @PersistenceContext
     private lateinit var entityManager: EntityManager
 
     @Transactional(rollbackFor = [Exception::class])
-    fun createReservation(reservationData: ReservationRequestDto): ReservationResponseDto {
+    fun createReservation(reservationData: ReservationRequestDto, currentTime: Instant): ReservationResponseDto {
         if (reservationData.seats.isEmpty()) {
             throw ClientResponseExceptionEntityNoSeatsInReservation()
         }
         // TODO_PAWEL also handle ze max 15 minut przed seansem tylko mozna
         val movieScreening = movieScreeningRepository.findByIdOrClientError(reservationData.movieScreeningId)
+        run {
+            val minimalTimeBetweenBookingAndScreeningStart =
+                customConfigProperties.minimalTimeBetweenBookingAndScreeningStart
+            val maximalTimeWhenOneCanBook = movieScreening.timeOfStart.minusSeconds(
+                (60).toLong() * minimalTimeBetweenBookingAndScreeningStart
+            )
+            if (currentTime > maximalTimeWhenOneCanBook) {
+                // TODO_PAWEL test it
+                throw ClientResponseExceptionReservationIsPlacedTooLate(minimalTimeBetweenBookingAndScreeningStart)
+            }
+        }
         entityManager.lock(movieScreening, LockModeType.OPTIMISTIC_FORCE_INCREMENT)
 
         val roomSeats = movieScreening.screeningRoom.seats

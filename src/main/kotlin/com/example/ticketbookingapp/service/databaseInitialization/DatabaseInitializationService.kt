@@ -8,6 +8,7 @@ import jakarta.persistence.PersistenceContext
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
+import java.time.Instant
 import java.time.LocalDateTime
 
 @Service
@@ -45,6 +46,8 @@ class DatabaseInitializationService(
         // to make sure ids of movie screenings are accessible
         entityManager.flush()
 
+        val instantNow = Instant.now()
+
         reservationService.createReservation(ReservationRequestDto(
             screening_1_1.id,
             "Name",
@@ -52,7 +55,7 @@ class DatabaseInitializationService(
             screening_1_1.screeningRoom.seats
                 .filter { seat -> seat.columnName == "3" }
                 .map { e -> SeatTicketTypeDto(e.id, studentTicketType.id) }
-        ))
+        ), instantNow)
 
         reservationService.createReservation(ReservationRequestDto(
             screening_1_1.id,
@@ -61,7 +64,7 @@ class DatabaseInitializationService(
             screening_1_1.screeningRoom.seats
                 .filter { seat -> seat.columnName == "6" }
                 .map { e -> SeatTicketTypeDto(e.id, adultTicketType.id) }
-        ))
+        ), instantNow)
 
         reservationService.createReservation(ReservationRequestDto(
             screening_1_2.id,
@@ -70,13 +73,13 @@ class DatabaseInitializationService(
             screening_1_2.screeningRoom.seats
                 .filter { seat -> seat.columnName == "7" }
                 .map { e -> SeatTicketTypeDto(e.id, childTicketType.id) }
-        ))
+        ), instantNow)
     }
 
     private fun initializeScreening(
         screeningRoom: ScreeningRoom,
         movie: Movie,
         hour: Int): MovieScreening {
-        return databaseInitializationUtils.initializeScreening(screeningRoom, movie, LocalDateTime.of(2000, 1, 1, hour, 0, 0), 30)
+        return databaseInitializationUtils.initializeScreening(screeningRoom, movie, LocalDateTime.of(2100, 1, 1, hour, 0, 0), 30)
     }
 }

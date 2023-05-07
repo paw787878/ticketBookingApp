@@ -16,6 +16,8 @@ import org.springframework.test.context.ActiveProfiles
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 import java.math.BigDecimal
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 import kotlin.test.assertEquals
 
 @SpringBootTest
@@ -62,7 +64,9 @@ internal class MovieReservationServiceTest {
         return reservationService.createReservation(
             ReservationRequestDto(1, "Pawel", "Surname",
                 seatIds.map { seat -> SeatTicketTypeDto(seat, 1) }
-            )
+            ),
+            // TODO_PAWEL test that it throws exception if wrong time
+            LocalDateTime.of(1999, 1, 1, 0, 0).toInstant(ZoneOffset.UTC)
         )
     }
 }

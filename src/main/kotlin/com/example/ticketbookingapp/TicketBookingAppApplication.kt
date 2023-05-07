@@ -1,27 +1,26 @@
 package com.example.ticketbookingapp
 
-import com.example.ticketbookingapp.service.DatabaseInitializationService
+import com.example.ticketbookingapp.config.CustomConfigProperties
 import com.example.ticketbookingapp.service.DatabaseInitializationForTest
+import com.example.ticketbookingapp.service.DatabaseInitializationService
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Profile
 
+@EnableConfigurationProperties(CustomConfigProperties::class)
 @SpringBootApplication
 class TicketBookingAppApplication {
 
     @Bean
     @Profile("default")
     fun dataLoader(
-        // TODO_PAWEL
-//        databaseInitializationService: DatabaseInitializationService
-        databaseInitializationForTest: DatabaseInitializationForTest
+        databaseInitializationService: DatabaseInitializationService
     ): CommandLineRunner {
         return CommandLineRunner {
-            // TODO_PAWEL
-//            databaseInitializationService.initializeDatabase()
-            databaseInitializationForTest.initializeDatabase()
+            databaseInitializationService.initializeDatabase()
         }
     }
 

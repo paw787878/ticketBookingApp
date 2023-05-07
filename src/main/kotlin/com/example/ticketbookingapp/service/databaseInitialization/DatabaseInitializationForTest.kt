@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
 import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 @Service
 class DatabaseInitializationForTest(
@@ -45,6 +46,8 @@ class DatabaseInitializationForTest(
         // to make sure ids of movie screenings are accessible
         entityManager.flush()
 
+        val instantInThePast = LocalDateTime.of(1999, 1, 1, 0, 0).toInstant(ZoneOffset.UTC)
+
         reservationService.createReservation(ReservationRequestDto(
             screening_1_1.id,
             "Name",
@@ -52,7 +55,8 @@ class DatabaseInitializationForTest(
             screening_1_1.screeningRoom.seats
                 .filter { seat -> seat.columnName == "1" }
                 .map { e -> SeatTicketTypeDto(e.id, studentTicketType.id) }
-        ))
+        ),
+            instantInThePast)
 
         reservationService.createReservation(ReservationRequestDto(
             screening_1_1.id,
@@ -61,7 +65,8 @@ class DatabaseInitializationForTest(
             screening_1_1.screeningRoom.seats
                 .filter { seat -> seat.columnName == "4" }
                 .map { e -> SeatTicketTypeDto(e.id, adultTicketType.id) }
-        ))
+        ),
+            instantInThePast)
 
         reservationService.createReservation(ReservationRequestDto(
             screening_1_2.id,
@@ -70,7 +75,9 @@ class DatabaseInitializationForTest(
             screening_1_2.screeningRoom.seats
                 .filter { seat -> seat.columnName == "5" }
                 .map { e -> SeatTicketTypeDto(e.id, childTicketType.id) }
-        ))
+        ),
+            instantInThePast
+        )
 
         reservationService.createReservation(ReservationRequestDto(
             screening_2_2.id,
@@ -79,7 +86,8 @@ class DatabaseInitializationForTest(
             screening_2_2.screeningRoom.seats
                 .filter { seat -> seat.columnName == "2" }
                 .map { e -> SeatTicketTypeDto(e.id, childTicketType.id) }
-        ))
+        ),
+            instantInThePast)
     }
 
     private fun initializeScreening(
@@ -87,6 +95,11 @@ class DatabaseInitializationForTest(
         movie: Movie,
         hour: Int,
     ): MovieScreening {
-        return databaseInitializationUtils.initializeScreening(screeningRoom, movie, LocalDateTime.of(2000, 1, 1, hour, 0, 0), 30)
+        return databaseInitializationUtils.initializeScreening(
+            screeningRoom,
+            movie,
+            LocalDateTime.of(2000, 1, 1, hour, 0, 0),
+            30
+        )
     }
 }
