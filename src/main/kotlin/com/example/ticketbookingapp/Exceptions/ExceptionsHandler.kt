@@ -3,6 +3,7 @@
 import jakarta.validation.ConstraintViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.orm.ObjectOptimisticLockingFailureException
 import org.springframework.transaction.TransactionSystemException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -26,8 +27,13 @@ class CustomGlobalExceptionHandler : ResponseEntityExceptionHandler() {
             }
             return ResponseEntity(message, HttpStatus.BAD_REQUEST);
         }
-        // TODO_PAWEL also other probably like optimistic
 
+        // TODO_PAWEL return json with http status in field
         return ResponseEntity("Database transaction exception", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(ObjectOptimisticLockingFailureException::class)
+    fun customHandleNotFound(ex : ObjectOptimisticLockingFailureException, request: WebRequest): ResponseEntity<String> {
+        return ResponseEntity("Data on which this request was working was changed. Try again", HttpStatus.INTERNAL_SERVER_ERROR)
     }
 }
