@@ -4,10 +4,12 @@ import org.hibernate.Hibernate
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.transaction.annotation.Transactional
 import kotlin.test.assertTrue
 
 @SpringBootTest
+@ActiveProfiles("test")
 class MovieTest() {
 
     @Autowired
