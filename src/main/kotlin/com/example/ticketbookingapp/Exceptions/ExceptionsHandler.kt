@@ -25,6 +25,7 @@ class CustomGlobalExceptionHandler : ResponseEntityExceptionHandler() {
             val message = constraintViolationException.constraintViolations.joinToString(separator = "\n") { violation ->
                 "${violation.invalidValue.toString()} should satisfy ${violation.message}"
             }
+            // TODO_PAWEL add test for this
             return ResponseEntity(message, HttpStatus.BAD_REQUEST);
         }
 

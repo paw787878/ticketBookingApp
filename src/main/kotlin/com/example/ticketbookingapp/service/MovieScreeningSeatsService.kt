@@ -16,7 +16,6 @@ class MovieScreeningSeatsService(private val movieScreeningRepository: MovieScre
     @PersistenceContext
     private lateinit var entityManager: EntityManager
 
-    // TODO_PAWEL shouldl those be read only transactions?
     @Transactional(rollbackFor = [Exception::class], readOnly = true)
     fun getReservedSeats(movieScreening: MovieScreening): List<Seat> {
         val cb = entityManager.criteriaBuilder
