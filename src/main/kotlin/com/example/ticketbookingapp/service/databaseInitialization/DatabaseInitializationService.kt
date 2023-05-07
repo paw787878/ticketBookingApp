@@ -12,13 +12,7 @@ import java.time.LocalDateTime
 
 @Service
 class DatabaseInitializationService(
-    private val movieRepository: MovieRepository,
-    private val screeningRoomRepository: ScreeningRoomRepository,
-    private val seatRepository: SeatRepository,
-    private val movieScreeningRepository: MovieScreeningRepository,
     private val reservationService: MovieReservationService,
-    private val seatsService: MovieScreeningSeatsService,
-    private val ticketTypeRepository: TicketTypeRepository,
     private val databaseInitializationUtils: DatabaseInitializationUtils,
 ) {
     @PersistenceContext
