@@ -29,9 +29,9 @@ class DatabaseInitializationForTest(
         val room2 = databaseInitializationUtils.initializeRoom("room 2", 10, 10)
         val room3 = databaseInitializationUtils.initializeRoom("room 3", 15, 15)
 
-        val movie1 = databaseInitializationUtils.initializeMovie("Schindler's List", 100)
-        val movie2 = databaseInitializationUtils.initializeMovie("The Shawshank Redemption", 120)
-        val movie3 = databaseInitializationUtils.initializeMovie("The Lord of the Rings: The Return of the King", 140)
+        val movie1 = databaseInitializationUtils.initializeMovie("Schindler's List", 90)
+        val movie2 = databaseInitializationUtils.initializeMovie("The Shawshank Redemption", 90)
+        val movie3 = databaseInitializationUtils.initializeMovie("The Lord of the Rings: The Return of the King", 90)
 
         val screening_1_1 = initializeScreening(room1, movie1, 10)
         val screening_1_2 = initializeScreening(room1, movie2, 20)
@@ -85,7 +85,8 @@ class DatabaseInitializationForTest(
     private fun initializeScreening(
         screeningRoom: ScreeningRoom,
         movie: Movie,
-        hour: Int): MovieScreening {
-        return databaseInitializationUtils.initializeScreening(screeningRoom, movie, LocalDateTime.of(2000, 1, 1, hour, 0, 0))
+        hour: Int,
+    ): MovieScreening {
+        return databaseInitializationUtils.initializeScreening(screeningRoom, movie, LocalDateTime.of(2000, 1, 1, hour, 0, 0), 30)
     }
 }

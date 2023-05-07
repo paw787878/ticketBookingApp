@@ -32,8 +32,8 @@ class MovieScreeningService(
         fun <T> CriteriaQuery<T>.addWhereInInterval(i: Root<MovieScreening>) =
             where(
                 cb.and(
-                    cb.greaterThan(i.get(MovieScreening_.timeOfStart), beginningOfPeriod),
-                    cb.lessThan(i.get(MovieScreening_.timeOfEnd), endOfPeriod)
+                    cb.greaterThanOrEqualTo(i.get(MovieScreening_.timeOfStart), beginningOfPeriod),
+                    cb.lessThanOrEqualTo(i.get(MovieScreening_.timeOfEnd), endOfPeriod)
                 )
             )
 

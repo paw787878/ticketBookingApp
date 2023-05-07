@@ -68,12 +68,12 @@ class DatabaseInitializationUtils(
     fun initializeScreening(
         screeningRoom: ScreeningRoom,
         movie: Movie,
-        dateTimeOfStart: LocalDateTime
+        dateTimeOfStart: LocalDateTime,
+        commercialsLengthInMinutes: Int,
     ): MovieScreening {
         val instantOfStart = dateTimeOfStart
             .toInstant(ZoneOffset.UTC)
-        val commercialsLength = 30
-        val instantOfEnd = instantOfStart.plusSeconds((commercialsLength + movie.lengthInMinutes).toLong() * 60)
+        val instantOfEnd = instantOfStart.plusSeconds((commercialsLengthInMinutes + movie.lengthInMinutes).toLong() * 60)
 
         return MovieScreening(movie, screeningRoom, instantOfStart, instantOfEnd)
             .let { movieScreeningRepository.save(it) }

@@ -14,10 +14,14 @@ class TicketBookingAppApplication {
     @Bean
     @Profile("default")
     fun dataLoader(
-        databaseInitializationService: DatabaseInitializationService
+        // TODO_PAWEL
+//        databaseInitializationService: DatabaseInitializationService
+        databaseInitializationForTest: DatabaseInitializationForTest
     ): CommandLineRunner {
         return CommandLineRunner {
-            databaseInitializationService.initializeDatabase()
+            // TODO_PAWEL
+//            databaseInitializationService.initializeDatabase()
+            databaseInitializationForTest.initializeDatabase()
         }
     }
 

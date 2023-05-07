@@ -77,6 +77,6 @@ class DatabaseInitializationService(
         screeningRoom: ScreeningRoom,
         movie: Movie,
         hour: Int): MovieScreening {
-        return databaseInitializationUtils.initializeScreening(screeningRoom, movie, LocalDateTime.of(2000, 1, 1, hour, 0, 0))
+        return databaseInitializationUtils.initializeScreening(screeningRoom, movie, LocalDateTime.of(2000, 1, 1, hour, 0, 0), 30)
     }
 }
