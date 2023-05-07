@@ -6,7 +6,7 @@ import com.example.ticketbookingapp.domain.*
 import jakarta.persistence.EntityManager
 import jakarta.persistence.LockModeType
 import jakarta.persistence.PersistenceContext
-import jakarta.transaction.Transactional
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.stereotype.Service
 
 @Service
@@ -22,7 +22,7 @@ class MovieReservationService(
     @PersistenceContext
     private lateinit var entityManager: EntityManager
 
-    @Transactional(rollbackOn = [Exception::class])
+    @Transactional(rollbackFor = [Exception::class])
     fun createReservation(reservationData: ReservationRequestDto): ReservationResponseDto {
         require(reservationData.seats.isNotEmpty())
         // TODO_PAWEL also handle ze max 15 minut przed seansem tylko mozna

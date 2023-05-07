@@ -6,7 +6,7 @@ import com.example.ticketbookingapp.dataTransferObject.SeatDto
 import com.example.ticketbookingapp.domain.*
 import jakarta.persistence.EntityManager
 import jakarta.persistence.PersistenceContext
-import jakarta.transaction.Transactional
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.stereotype.Service
 
 @Service
@@ -16,7 +16,7 @@ class MovieScreeningSeatsService(private val movieScreeningRepository: MovieScre
     private lateinit var entityManager: EntityManager
 
     // TODO_PAWEL shouldl those be read only transactions?
-    @Transactional(rollbackOn = [Exception::class])
+    @Transactional(rollbackFor = [Exception::class], readOnly = true)
     fun getReservedSeats(movieScreening: MovieScreening): List<Seat> {
         val cb = entityManager.criteriaBuilder
         val criteria = cb.createQuery(Seat::class.java)
@@ -33,13 +33,13 @@ class MovieScreeningSeatsService(private val movieScreeningRepository: MovieScre
         return query.resultList
     }
 
-    @Transactional(rollbackOn = [Exception::class])
+    @Transactional(rollbackFor = [Exception::class], readOnly = true)
     fun getSeatInfos(movieScreeningId: Long): MovieScreeningAndRoomDto {
         // TODO_PAWEL handle if invalid id
         return getSeatInfos(movieScreeningRepository.findById(movieScreeningId).get())
     }
 
-    @Transactional(rollbackOn = [Exception::class])
+    @Transactional(rollbackFor = [Exception::class], readOnly = true)
     fun getSeatInfos(movieScreening: MovieScreening): MovieScreeningAndRoomDto {
         val reservedSeats = getReservedSeats(movieScreening).toSet()
         val allSeats = movieScreening.screeningRoom.seats

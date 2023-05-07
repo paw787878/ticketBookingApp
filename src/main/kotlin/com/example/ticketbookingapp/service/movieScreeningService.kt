@@ -8,7 +8,7 @@ import jakarta.persistence.EntityManager
 import jakarta.persistence.PersistenceContext
 import jakarta.persistence.criteria.CriteriaQuery
 import jakarta.persistence.criteria.Root
-import jakarta.transaction.Transactional
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.stereotype.Service
 import java.time.Instant
 
@@ -19,7 +19,7 @@ class MovieScreeningService(
     @PersistenceContext
     private lateinit var entityManager: EntityManager
 
-    @Transactional(rollbackOn = [Exception::class])
+    @Transactional(rollbackFor = [Exception::class], readOnly = true)
     fun getScreeningsInPeriod(
         beginningOfPeriod: Instant,
         endOfPeriod: Instant,

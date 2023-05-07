@@ -5,7 +5,7 @@ import com.example.ticketbookingapp.dataTransferObject.SeatTicketTypeDto
 import com.example.ticketbookingapp.domain.*
 import jakarta.persistence.EntityManager
 import jakarta.persistence.PersistenceContext
-import jakarta.transaction.Transactional
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
 import java.time.LocalDateTime
@@ -25,7 +25,7 @@ class DatabaseInitializationService(
     private lateinit var entityManager: EntityManager
 
     // TODO_PAWEL i think it needs to specify some exceptions or esle it is wrong
-    @Transactional(rollbackOn = [Exception::class])
+    @Transactional(rollbackFor = [Exception::class])
     fun initializeDatabase() {
         val adultTicketType = initializeTicketType("adult", BigDecimal("25"))
         val studentTicketType = initializeTicketType("student", BigDecimal("18"))
