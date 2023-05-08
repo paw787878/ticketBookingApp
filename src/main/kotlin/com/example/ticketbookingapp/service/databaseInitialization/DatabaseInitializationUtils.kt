@@ -1,11 +1,6 @@
-﻿package com.example.ticketbookingapp.service
+﻿package com.example.ticketbookingapp.service.databaseInitialization
 
-import com.example.ticketbookingapp.dataTransferObject.ReservationRequestDto
-import com.example.ticketbookingapp.dataTransferObject.SeatTicketTypeDto
 import com.example.ticketbookingapp.domain.*
-import jakarta.persistence.EntityManager
-import jakarta.persistence.PersistenceContext
-import org.springframework.transaction.annotation.Transactional
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
 import java.time.LocalDateTime
@@ -17,13 +12,8 @@ class DatabaseInitializationUtils(
     private val screeningRoomRepository: ScreeningRoomRepository,
     private val seatRepository: SeatRepository,
     private val movieScreeningRepository: MovieScreeningRepository,
-    private val reservationService: MovieReservationService,
-    private val seatsService: MovieScreeningSeatsService,
     private val ticketTypeRepository: TicketTypeRepository,
 ) {
-    @PersistenceContext
-    private lateinit var entityManager: EntityManager
-
     fun initializeTicketType(name: String, price: BigDecimal): TicketType {
         return TicketType(name, price).let { ticketTypeRepository.save(it) }
     }

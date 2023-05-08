@@ -1,4 +1,4 @@
-﻿package com.example.ticketbookingapp.Exceptions
+﻿package com.example.ticketbookingapp.exceptions
 
 import jakarta.validation.ConstraintViolationException
 import org.springframework.http.HttpStatus
@@ -15,21 +15,21 @@ class CustomGlobalExceptionHandler : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(ClientResponseException::class)
     fun customHandleNotFound(ex : ClientResponseException, request: WebRequest): ResponseEntity<ApiError> {
-        return ResponseEntity(ApiError(ex.responseStatus, ex.message), ex.responseStatus);
+        return ResponseEntity(ApiError(ex.responseStatus, ex.message), ex.responseStatus)
     }
 
     @ExceptionHandler(TransactionSystemException::class)
     fun customHandleNotFound(ex : TransactionSystemException, request: WebRequest): ResponseEntity<ApiError> {
         (ex.cause?.cause as? ConstraintViolationException)?.let { constraintViolationException ->
             val message = constraintViolationException.constraintViolations.joinToString(separator = "\n") { violation ->
-                "${violation.invalidValue.toString()} should satisfy ${violation.message}"
+                "${violation.invalidValue} should satisfy ${violation.message}"
             }
             val httpStatus = HttpStatus.BAD_REQUEST
-            return ResponseEntity(ApiError(httpStatus, message), httpStatus);
+            return ResponseEntity(ApiError(httpStatus, message), httpStatus)
         }
 
         val serverError = HttpStatus.INTERNAL_SERVER_ERROR
-        return ResponseEntity(ApiError(serverError, "Database transaction exception"), serverError);
+        return ResponseEntity(ApiError(serverError, "Database transaction exception"), serverError)
     }
 
     @ExceptionHandler(ObjectOptimisticLockingFailureException::class)

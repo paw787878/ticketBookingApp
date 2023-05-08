@@ -1,8 +1,9 @@
-﻿package com.example.ticketbookingapp.service
+﻿package com.example.ticketbookingapp.service.databaseInitialization
 
 import com.example.ticketbookingapp.dataTransferObject.ReservationRequestDto
 import com.example.ticketbookingapp.dataTransferObject.SeatTicketTypeDto
 import com.example.ticketbookingapp.domain.*
+import com.example.ticketbookingapp.service.MovieReservationService
 import jakarta.persistence.EntityManager
 import jakarta.persistence.PersistenceContext
 import org.springframework.transaction.annotation.Transactional

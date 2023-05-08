@@ -1,7 +1,6 @@
 ﻿package com.example.ticketbookingapp.service
 
 import com.example.ticketbookingapp.domain.MovieScreening
-import com.example.ticketbookingapp.domain.MovieScreeningRepository
 import com.example.ticketbookingapp.domain.MovieScreening_
 import com.example.ticketbookingapp.domain.Movie_
 import jakarta.persistence.EntityManager
@@ -13,9 +12,7 @@ import org.springframework.stereotype.Service
 import java.time.Instant
 
 @Service
-class MovieScreeningService(
-    private val movieScreeningRepository: MovieScreeningRepository,
-) {
+class MovieScreeningService {
     @PersistenceContext
     private lateinit var entityManager: EntityManager
 

@@ -1,8 +1,8 @@
-﻿package com.example.ticketbookingapp.Exceptions
+﻿package com.example.ticketbookingapp.exceptions
 
 import org.springframework.http.HttpStatus
 
-abstract class ClientResponseException() : RuntimeException() {
+abstract class ClientResponseException : RuntimeException() {
     open val responseStatus = HttpStatus.BAD_REQUEST
 
     abstract fun messageImplementation(): String
@@ -11,11 +11,11 @@ abstract class ClientResponseException() : RuntimeException() {
         get() = messageImplementation()
 }
 
-class ClientResponseExceptionEntityIdIsWrong(val id: Long, val entityType: Class<*>) : ClientResponseException() {
+class ClientResponseExceptionEntityIdIsWrong(val id: Long, private val entityType: Class<*>) : ClientResponseException() {
     override fun messageImplementation() = "$id is wrong id for ${entityType.simpleName}"
 }
 
-class ClientResponseExceptionEntityNoSeatsInReservation() : ClientResponseException() {
+class ClientResponseExceptionEntityNoSeatsInReservation : ClientResponseException() {
     override fun messageImplementation() = "Reservation need to reserve at least 1 seat"
 }
 
@@ -35,6 +35,6 @@ class ClientResponseExceptionWouldLeaveSingleSeatSurrounded(val id: Long) : Clie
     override fun messageImplementation() = "Seat with id $id would be surrounded by reserved seats"
 }
 
-class ClientResponseExceptionReservationIsPlacedTooLate(val timeInMinutes: Int) : ClientResponseException() {
+class ClientResponseExceptionReservationIsPlacedTooLate(private val timeInMinutes: Int) : ClientResponseException() {
     override fun messageImplementation() = "You can book only until $timeInMinutes before screening starts"
 }

@@ -52,18 +52,18 @@ class CapitalizedWordOrTwoCapitalizedWordsWithHyphenValidator : ConstraintValida
     override fun isValid(value: String?, context: ConstraintValidatorContext?): Boolean {
         if (value == null) return false
 
-        val splitted = value.split("-")
+        val split = value.split("-")
 
-        if (splitted.isEmpty()) {
+        if (split.isEmpty()) {
             return false
         }
 
-        if (splitted.count() == 1) {
-            return wordIsCapitalized(splitted[0])
+        if (split.count() == 1) {
+            return wordIsCapitalized(split[0])
         }
 
-        if (splitted.count() == 2) {
-            val (word1, word2) = splitted
+        if (split.count() == 2) {
+            val (word1, word2) = split
             return wordIsCapitalized(word1) && wordIsCapitalized(word2)
         }
 

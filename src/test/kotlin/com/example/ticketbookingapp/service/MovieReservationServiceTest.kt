@@ -1,6 +1,6 @@
 ﻿package com.example.ticketbookingapp.service
 
-import com.example.ticketbookingapp.Exceptions.*
+import com.example.ticketbookingapp.exceptions.*
 import com.example.ticketbookingapp.config.CustomConfigProperties
 import com.example.ticketbookingapp.dataTransferObject.ReservationRequestDto
 import com.example.ticketbookingapp.dataTransferObject.ReservationResponseDto

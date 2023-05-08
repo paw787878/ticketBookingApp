@@ -4,6 +4,7 @@ import com.example.ticketbookingapp.dataTransferObject.*
 import com.example.ticketbookingapp.service.MovieReservationService
 import com.example.ticketbookingapp.service.MovieScreeningSeatsService
 import com.example.ticketbookingapp.service.MovieScreeningService
+import com.example.ticketbookingapp.dataTransferObject.ScreeningSelectionRequestDto
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import java.time.Instant

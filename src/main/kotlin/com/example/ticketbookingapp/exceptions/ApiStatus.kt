@@ -1,4 +1,4 @@
-﻿package com.example.ticketbookingapp.Exceptions
+﻿package com.example.ticketbookingapp.exceptions
 
 import org.springframework.http.HttpStatus
 

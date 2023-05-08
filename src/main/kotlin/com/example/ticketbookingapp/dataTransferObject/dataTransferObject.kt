@@ -1,21 +1,8 @@
 ﻿package com.example.ticketbookingapp.dataTransferObject
 
-import com.example.ticketbookingapp.domain.Movie
-import com.example.ticketbookingapp.domain.ScreeningRoom
-import com.example.ticketbookingapp.domain.Seat
-import com.fasterxml.jackson.annotation.JsonProperty
 import org.springframework.format.annotation.DateTimeFormat
 import java.math.BigDecimal
 import java.time.Instant
-
-data class ScreeningSelectionRequestDto(
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    val minimalStartTime: Instant,
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    val maximalEndTime: Instant,
-    val offset: Int,
-    val limit: Int,
-)
 
 data class ScreeningInfoRequestDto(
     val screeningId: Long,
@@ -61,4 +48,13 @@ data class SeatTicketTypeDto(
 data class ReservationResponseDto(
     val totalAmountToPay: BigDecimal,
     val reservationExpirationTime: Instant,
+)
+
+data class ScreeningSelectionRequestDto(
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    val minimalStartTime: Instant,
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    val maximalEndTime: Instant,
+    val offset: Int,
+    val limit: Int,
 )

@@ -1,6 +1,6 @@
 ﻿package com.example.ticketbookingapp.utils
 
-import com.example.ticketbookingapp.Exceptions.ClientResponseExceptionEntityIdIsWrong
+import com.example.ticketbookingapp.exceptions.ClientResponseExceptionEntityIdIsWrong
 import org.springframework.data.jpa.repository.JpaRepository
 
 
