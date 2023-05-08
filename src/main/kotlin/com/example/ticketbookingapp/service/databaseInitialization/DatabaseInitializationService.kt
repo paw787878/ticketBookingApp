@@ -1,9 +1,8 @@
 ﻿package com.example.ticketbookingapp.service.databaseInitialization
 
-import com.example.ticketbookingapp.dataTransferObject.ReservationRequestDto
-import com.example.ticketbookingapp.dataTransferObject.SeatTicketTypeDto
 import com.example.ticketbookingapp.domain.*
 import com.example.ticketbookingapp.service.MovieReservationService
+import com.example.ticketbookingapp.service.SeatTicketType
 import jakarta.persistence.EntityManager
 import jakarta.persistence.PersistenceContext
 import org.springframework.transaction.annotation.Transactional
@@ -48,32 +47,38 @@ class DatabaseInitializationService(
 
         val instantNow = Instant.now()
 
-        reservationService.createReservation(ReservationRequestDto(
-            screening_1_1.id,
-            "Name",
-            "Surname",
+        reservationService.createReservation(
+            screening_1_1,
+            User(
+                "Name",
+                "Surname",
+            ),
             screening_1_1.screeningRoom.seats
                 .filter { seat -> seat.columnName == "3" }
-                .map { e -> SeatTicketTypeDto(e.id, studentTicketType.id) }
-        ), instantNow)
+                .map { e -> SeatTicketType(e, studentTicketType) }
+        , instantNow)
 
-        reservationService.createReservation(ReservationRequestDto(
-            screening_1_1.id,
-            "Namee",
-            "Surnamee",
+        reservationService.createReservation(
+            screening_1_1,
+            User(
+                "Namee",
+                "Surnamee",
+            ),
             screening_1_1.screeningRoom.seats
                 .filter { seat -> seat.columnName == "6" }
-                .map { e -> SeatTicketTypeDto(e.id, adultTicketType.id) }
-        ), instantNow)
+                .map { e -> SeatTicketType(e, adultTicketType) }
+        , instantNow)
 
-        reservationService.createReservation(ReservationRequestDto(
-            screening_1_2.id,
-            "Nameee",
-            "Surnameee",
+        reservationService.createReservation(
+            screening_1_2,
+            User(
+                "Nameee",
+                "Surnameee",
+            ),
             screening_1_2.screeningRoom.seats
                 .filter { seat -> seat.columnName == "7" }
-                .map { e -> SeatTicketTypeDto(e.id, childTicketType.id) }
-        ), instantNow)
+                .map { e -> SeatTicketType(e, childTicketType) }
+        , instantNow)
     }
 
     private fun initializeScreening(

@@ -2,22 +2,18 @@
 
 import com.example.ticketbookingapp.exceptions.*
 import com.example.ticketbookingapp.config.CustomConfigProperties
-import com.example.ticketbookingapp.dataTransferObject.ReservationRequestDto
-import com.example.ticketbookingapp.dataTransferObject.ReservationResponseDto
 import com.example.ticketbookingapp.domain.*
-import com.example.ticketbookingapp.utils.findByIdOrClientError
 import jakarta.persistence.EntityManager
 import jakarta.persistence.LockModeType
 import jakarta.persistence.PersistenceContext
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.stereotype.Service
+import java.math.BigDecimal
 import java.time.Instant
 
 @Service
 class MovieReservationService(
     private val screeningSeatsService: MovieScreeningSeatsService,
-    private val movieScreeningRepository: MovieScreeningRepository,
-    private val seatRepository: SeatRepository,
     private val reservationRepository: ReservationRepository,
     private val ticketTypeRepository: TicketTypeRepository,
     private val reservationSeatRepository: ReservationSeatRepository,
@@ -28,11 +24,10 @@ class MovieReservationService(
     private lateinit var entityManager: EntityManager
 
     @Transactional(rollbackFor = [Exception::class])
-    fun createReservation(reservationData: ReservationRequestDto, currentTime: Instant): ReservationResponseDto {
-        if (reservationData.seats.isEmpty()) {
+    fun createReservation(movieScreening: MovieScreening, user: User, seatsAndTicketTypes: List<SeatTicketType>, currentTime: Instant): ReservationAndPrice {
+        if (seatsAndTicketTypes.isEmpty()) {
             throw ClientResponseExceptionEntityNoSeatsInReservation()
         }
-        val movieScreening = movieScreeningRepository.findByIdOrClientError(reservationData.movieScreeningId)
         run {
             val minimalTimeBetweenBookingAndScreeningStart =
                 customConfigProperties.minimalTimeBetweenBookingAndScreeningStart
@@ -49,10 +44,10 @@ class MovieReservationService(
         val reservedSeats = screeningSeatsService.getReservedSeats(movieScreening).toSet()
 
         val chosenSeats = buildSet {
-            for (seatTicket in reservationData.seats) {
-                val newSeat = seatRepository.findByIdOrClientError(seatTicket.seatId)
+            for (seatTicket in seatsAndTicketTypes) {
+                val newSeat = seatTicket.seat
                 if (contains(newSeat)) {
-                    throw ClientResponseExceptionTwoSameSeatsInReservation(seatTicket.seatId)
+                    throw ClientResponseExceptionTwoSameSeatsInReservation(newSeat.id)
                 }
 
                 add(newSeat)
@@ -85,21 +80,31 @@ class MovieReservationService(
         }
 
         val reservation = Reservation(
-            User(reservationData.name, reservationData.surname),
+            user,
             movieScreening,
             movieScreening.timeOfStart
         )
             .let { reservationRepository.save(it) }
 
         var amountToPay = 0.toBigDecimal()
-        for (ticketSeat in reservationData.seats) {
-            val ticketType = ticketTypeRepository.findByIdOrClientError(ticketSeat.ticketType)
-            val seat = seatRepository.findByIdOrClientError(ticketSeat.seatId)
+        for (ticketSeat in seatsAndTicketTypes) {
+            val ticketType = ticketSeat.ticketType
+            val seat = ticketSeat.seat
             ticketTypeRepository
             ReservationSeat(reservation, seat, ticketType).let { reservationSeatRepository.save(it) }
             amountToPay += ticketType.price
         }
 
-        return ReservationResponseDto(amountToPay, reservation.expirationDate)
+        return ReservationAndPrice(reservation, amountToPay)
     }
 }
+
+data class SeatTicketType(
+    val seat: Seat,
+    val ticketType: TicketType,
+)
+
+data class ReservationAndPrice(
+    val reservation: Reservation,
+    val priceToPay: BigDecimal,
+)

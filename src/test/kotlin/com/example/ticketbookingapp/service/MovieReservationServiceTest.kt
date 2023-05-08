@@ -2,11 +2,7 @@
 
 import com.example.ticketbookingapp.exceptions.*
 import com.example.ticketbookingapp.config.CustomConfigProperties
-import com.example.ticketbookingapp.dataTransferObject.ReservationRequestDto
-import com.example.ticketbookingapp.dataTransferObject.ReservationResponseDto
-import com.example.ticketbookingapp.dataTransferObject.SeatTicketTypeDto
-import com.example.ticketbookingapp.domain.MovieScreeningRepository
-import com.example.ticketbookingapp.domain.ScreeningRoomRepository
+import com.example.ticketbookingapp.domain.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
@@ -38,6 +34,12 @@ internal class MovieReservationServiceTest {
     @Autowired
     lateinit var customConfigProperties: CustomConfigProperties
 
+    @Autowired
+    lateinit var ticketTypeRepository: TicketTypeRepository
+
+    @Autowired
+    lateinit var seatRepository: SeatRepository
+
     @Test
     @Transactional(rollbackFor = [Exception::class])
     fun reservationApiTests() {
@@ -50,7 +52,6 @@ internal class MovieReservationServiceTest {
 
         val timeInDistantPast = LocalDateTime.of(1999, 1, 1, 0, 0).toInstant(ZoneOffset.UTC)
 
-        assertThrows<ClientResponseExceptionEntityIdIsWrong> { doReservation(listOf(-1), timeInDistantPast) }
         assertThrows<ClientResponseExceptionEntityNoSeatsInReservation> { doReservation(listOf(), timeInDistantPast) }
         assertThrows<ClientResponseExceptionTwoSameSeatsInReservation> {
             doReservation(
@@ -82,8 +83,8 @@ internal class MovieReservationServiceTest {
         }
 
         val response = doReservation(listOf(seat_5a.id, seat_5b.id), timeInDistantPast)
-        assertEquals(response.totalAmountToPay.toDouble(), 50.0)
-        assertEquals(response.reservationExpirationTime, movieScreening.timeOfStart)
+        assertEquals(response.priceToPay.toDouble(), 50.0)
+        assertEquals(response.reservation.expirationDate, movieScreening.timeOfStart)
     }
 
     @Test
@@ -111,11 +112,14 @@ internal class MovieReservationServiceTest {
     }
 
     @Transactional(rollbackFor = [Exception::class], propagation = Propagation.REQUIRES_NEW)
-    fun doReservation(seatIds: List<Long>, time: Instant): ReservationResponseDto {
+    fun doReservation(seatIds: List<Long>, time: Instant): ReservationAndPrice {
+        val movieScreening = movieScreeningRepository.findById(1).get()
         return reservationService.createReservation(
-            ReservationRequestDto(1, "Pawel", "Surname",
-                seatIds.map { seat -> SeatTicketTypeDto(seat, 1) }
-            ),
+            movieScreening, User("Pawel", "Surname"),
+                seatIds.map { seat -> SeatTicketType(
+                    seatRepository.findById(seat).get()
+                    , ticketTypeRepository.findById(1).get()) }
+            ,
             time
         )
     }
