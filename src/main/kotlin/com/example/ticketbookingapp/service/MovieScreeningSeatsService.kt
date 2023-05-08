@@ -1,10 +1,6 @@
 ﻿package com.example.ticketbookingapp.service
 
-import com.example.ticketbookingapp.dataTransferObject.MovieScreeningAndRoomDto
-import com.example.ticketbookingapp.dataTransferObject.MovieScreeningDto
-import com.example.ticketbookingapp.dataTransferObject.SeatDto
 import com.example.ticketbookingapp.domain.*
-import com.example.ticketbookingapp.utils.findByIdOrClientError
 import jakarta.persistence.EntityManager
 import jakarta.persistence.PersistenceContext
 import org.springframework.transaction.annotation.Transactional
@@ -34,23 +30,17 @@ class MovieScreeningSeatsService(private val movieScreeningRepository: MovieScre
     }
 
     @Transactional(rollbackFor = [Exception::class], readOnly = true)
-    fun getSeatInfos(movieScreeningId: Long): MovieScreeningAndRoomDto {
-        return getSeatInfos(movieScreeningRepository.findByIdOrClientError(movieScreeningId))
-    }
-
-    @Transactional(rollbackFor = [Exception::class], readOnly = true)
-    fun getSeatInfos(movieScreening: MovieScreening): MovieScreeningAndRoomDto {
+    fun getSeatInfos(movieScreening: MovieScreening): List<SeatAvailability> {
         val reservedSeats = getReservedSeats(movieScreening).toSet()
         val allSeats = movieScreening.screeningRoom.seats
 
-        val seatInfos = allSeats.map { seat ->
-            SeatDto(seat.rowName, seat.columnName, seat.id, seat !in reservedSeats)
+        return allSeats.map { seat ->
+            SeatAvailability(seat, seat !in reservedSeats)
         }
-
-        return MovieScreeningAndRoomDto(
-            MovieScreeningDto(movieScreening.id, movieScreening.movie.title, movieScreening.timeOfStart, movieScreening.timeOfEnd),
-            movieScreening.screeningRoom.name,
-            seatInfos
-        )
     }
 }
+
+data class SeatAvailability(
+    val seat: Seat,
+    val available : Boolean,
+)

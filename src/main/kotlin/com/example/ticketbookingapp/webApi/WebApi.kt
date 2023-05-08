@@ -4,7 +4,6 @@ import com.example.ticketbookingapp.dataTransferObject.*
 import com.example.ticketbookingapp.service.MovieReservationService
 import com.example.ticketbookingapp.service.MovieScreeningSeatsService
 import com.example.ticketbookingapp.service.MovieScreeningService
-import com.example.ticketbookingapp.dataTransferObject.ScreeningSelectionRequestDto
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import java.time.Instant
@@ -21,26 +20,6 @@ class WebApi(
     private val seatsService: MovieScreeningSeatsService,
     private val movieReservationService: MovieReservationService,
 ) {
-
-    @GetMapping("/screenings")
-    fun getScreeningsInSelectedTime(dto: ScreeningSelectionRequestDto): ScreeningSelectionResponseDto {
-        val (list, count) = movieScreeningService.getScreeningsInPeriod(
-            dto.minimalStartTime,
-            dto.maximalEndTime,
-            dto.offset, dto.limit
-        )
-
-        return ScreeningSelectionResponseDto(
-            list.map { e ->
-                MovieScreeningDto(e.id, e.movie.title, starts = e.timeOfStart, ends = e.timeOfEnd)
-            },
-            count)
-    }
-
-    @GetMapping("/screening")
-    fun getScreeningInfo(dto: ScreeningInfoRequestDto): MovieScreeningAndRoomDto {
-        return seatsService.getSeatInfos(dto.screeningId)
-    }
 
     @PostMapping("/createReservation", consumes = ["application/json"])
     @ResponseStatus(HttpStatus.CREATED)

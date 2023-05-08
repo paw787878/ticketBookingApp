@@ -43,10 +43,10 @@ internal class MovieReservationServiceTest {
     fun reservationApiTests() {
         val movieScreening = movieScreeningRepository.findById(1).get()
         val seats = seatsService.getSeatInfos(movieScreening)
-        val seat_5a = seats.seats.find { e -> e.rowName == "A" && e.columnName == "5" }!!
-        val seat_5b = seats.seats.find { e -> e.rowName == "B" && e.columnName == "5" }!!
-        val seat_4a = seats.seats.find { e -> e.rowName == "A" && e.columnName == "4" }!!
-        val seat_3a = seats.seats.find { e -> e.rowName == "A" && e.columnName == "3" }!!
+        val seat_5a = seats.find { e -> e.seat.rowName == "A" && e.seat.columnName == "5" }!!.seat
+        val seat_5b = seats.find { e -> e.seat.rowName == "B" && e.seat.columnName == "5" }!!.seat
+        val seat_4a = seats.find { e -> e.seat.rowName == "A" && e.seat.columnName == "4" }!!.seat
+        val seat_3a = seats.find { e -> e.seat.rowName == "A" && e.seat.columnName == "3" }!!.seat
 
         val timeInDistantPast = LocalDateTime.of(1999, 1, 1, 0, 0).toInstant(ZoneOffset.UTC)
 
@@ -91,7 +91,7 @@ internal class MovieReservationServiceTest {
     fun reservationPlacedTooLate() {
         val movieScreening = movieScreeningRepository.findById(1).get()
         val seats = seatsService.getSeatInfos(movieScreening)
-        val seat_5a = seats.seats.find { e -> e.rowName == "A" && e.columnName == "5" }!!
+        val seat_5a = seats.find { e -> e.seat.rowName == "A" && e.seat.columnName == "5" }!!.seat
 
         val minimalTimeBetweenBookingAndScreeningStart =
             customConfigProperties.minimalTimeBetweenBookingAndScreeningStart
