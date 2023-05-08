@@ -10,8 +10,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 import java.math.BigDecimal
 import java.time.Instant
 
-// TODO_PAWEL not null and such
-
 // TODO_PAWEL move to separate files
 
 @Embeddable
@@ -53,14 +51,12 @@ class ScreeningRoom(
     @Id @GeneratedValue
     val id: Long = 0,
 ){
-    // TODO_PAWEL can you use metadata model here?
     @OneToMany(mappedBy = "screeningRoom")
     val seats: MutableSet<Seat> = HashSet()
 }
 
 interface ScreeningRoomRepository : JpaRepository<ScreeningRoom, Long>
 
-// TODO_PAWEL czy nadpisywac equals?
 @Entity
 class MovieScreening(
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -77,9 +73,7 @@ class MovieScreening(
 
     @Id @GeneratedValue
     val id: Long = 0,
-    // TODO_PAWEL this does not modify in database, investigate
     @Version
-    // TODO_PAWEL renaming does not help
     val version: Int = 0,
 )
 
@@ -91,7 +85,6 @@ class Reservation(
     val user: User,
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    // TODO_PAWEL why not used?
     val movieScreening: MovieScreening,
 
     @Column(nullable = false)

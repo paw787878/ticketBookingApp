@@ -19,7 +19,6 @@ class DatabaseInitializationService(
     @PersistenceContext
     private lateinit var entityManager: EntityManager
 
-    // TODO_PAWEL i think it needs to specify some exceptions or esle it is wrong
     @Transactional(rollbackFor = [Exception::class])
     fun initializeDatabase() {
         val adultTicketType = databaseInitializationUtils.initializeTicketType("adult", BigDecimal("25"))

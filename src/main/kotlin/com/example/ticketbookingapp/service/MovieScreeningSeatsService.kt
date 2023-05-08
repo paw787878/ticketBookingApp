@@ -43,7 +43,6 @@ class MovieScreeningSeatsService(private val movieScreeningRepository: MovieScre
         val reservedSeats = getReservedSeats(movieScreening).toSet()
         val allSeats = movieScreening.screeningRoom.seats
 
-        // TODO_PAWEL i could do this work after closing transaction
         val seatInfos = allSeats.map { seat ->
             SeatDto(seat.rowName, seat.columnName, seat.id, seat !in reservedSeats)
         }

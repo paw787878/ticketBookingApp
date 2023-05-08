@@ -31,7 +31,6 @@ class DatabaseInitializationUtils(
     fun initializeRoom(roomName: String, numberOfRows: Int, numberOfColumns: Int): ScreeningRoom {
         val screeningRoom = ScreeningRoom(roomName).let { screeningRoomRepository.save(it) }
         val rowNames = ('A'..'Z').toList()
-        // TODO_PAWEL we could have corridors in rooms
         val seatsArray = buildList {
             repeat(numberOfRows) { row ->
                 add(buildList {

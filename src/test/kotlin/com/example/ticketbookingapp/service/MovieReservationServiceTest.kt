@@ -5,10 +5,8 @@ import com.example.ticketbookingapp.config.CustomConfigProperties
 import com.example.ticketbookingapp.dataTransferObject.ReservationRequestDto
 import com.example.ticketbookingapp.dataTransferObject.ReservationResponseDto
 import com.example.ticketbookingapp.dataTransferObject.SeatTicketTypeDto
-import com.example.ticketbookingapp.domain.MovieScreening
 import com.example.ticketbookingapp.domain.MovieScreeningRepository
 import com.example.ticketbookingapp.domain.ScreeningRoomRepository
-import com.example.ticketbookingapp.domain.Seat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
@@ -16,7 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
-import java.math.BigDecimal
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneOffset

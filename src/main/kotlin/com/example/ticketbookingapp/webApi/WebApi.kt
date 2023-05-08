@@ -13,7 +13,7 @@ import java.time.Instant
     path = ["/api"],
     produces = ["application/json"]
 )
-// TODO_PAWEL should it be oher?
+// cors would be changed in final app
 @CrossOrigin(origins = ["*"])
 class WebApi(
     private val movieScreeningService: MovieScreeningService,
@@ -37,7 +37,6 @@ class WebApi(
     }
 
     @GetMapping("/screening")
-    // TODO_PAWEL handle errors in transactions
     fun getScreeningInfo(dto: ScreeningInfoRequestDto): MovieScreeningAndRoomDto {
         return seatsService.getSeatInfos(dto.screeningId)
     }

@@ -32,7 +32,6 @@ class MovieReservationService(
         if (reservationData.seats.isEmpty()) {
             throw ClientResponseExceptionEntityNoSeatsInReservation()
         }
-        // TODO_PAWEL also handle ze max 15 minut przed seansem tylko mozna
         val movieScreening = movieScreeningRepository.findByIdOrClientError(reservationData.movieScreeningId)
         run {
             val minimalTimeBetweenBookingAndScreeningStart =
@@ -41,7 +40,6 @@ class MovieReservationService(
                 (60).toLong() * minimalTimeBetweenBookingAndScreeningStart
             )
             if (currentTime > maximalTimeWhenOneCanBook) {
-                // TODO_PAWEL test it
                 throw ClientResponseExceptionReservationIsPlacedTooLate(minimalTimeBetweenBookingAndScreeningStart)
             }
         }
@@ -74,8 +72,6 @@ class MovieReservationService(
                 fun isOrWillBeReserved(seat: Seat?) =
                     seat?.let { it in reservedSeats || it in chosenSeats } ?: false
 
-                // TODO_PAWEL this thorws
-
                 if (!isOrWillBeReserved(neighbour) &&
                     isOrWillBeReserved(neighbour.seatToLeft) &&
                     isOrWillBeReserved(neighbour.seatToRight)
@@ -88,12 +84,9 @@ class MovieReservationService(
             checkNeighbour(chosenSeat.seatToRight)
         }
 
-        // TODO_PAWEL check if it is up to 15 minuts before screening
-
         val reservation = Reservation(
             User(reservationData.name, reservationData.surname),
             movieScreening,
-            // TODO_PAWEL is this time ok?
             movieScreening.timeOfStart
         )
             .let { reservationRepository.save(it) }
