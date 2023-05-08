@@ -1,7 +1,7 @@
 ﻿package com.example.ticketbookingapp.domain
 
-import com.example.ticketbookingapp.domain.validation.CapitalizedWordOrTwoCapitalizedWordsWithHyphen
-import com.example.ticketbookingapp.domain.validation.FirstLetterIsCapital
+import com.example.ticketbookingapp.validation.CapitalizedWordOrTwoCapitalizedWordsWithHyphen
+import com.example.ticketbookingapp.validation.FirstLetterIsCapital
 import jakarta.persistence.Column
 import jakarta.persistence.Embeddable
 import jakarta.validation.constraints.Pattern

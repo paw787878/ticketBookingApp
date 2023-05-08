@@ -1,6 +1,6 @@
 ﻿package com.example.ticketbookingapp.service
 
-import com.example.ticketbookingapp.domain.MovieScreeningRepository
+import com.example.ticketbookingapp.repositories.MovieScreeningRepository
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired

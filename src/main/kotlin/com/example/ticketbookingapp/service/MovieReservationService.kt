@@ -3,6 +3,9 @@
 import com.example.ticketbookingapp.exceptions.*
 import com.example.ticketbookingapp.config.CustomConfigProperties
 import com.example.ticketbookingapp.domain.*
+import com.example.ticketbookingapp.repositories.ReservationRepository
+import com.example.ticketbookingapp.repositories.ReservationSeatRepository
+import com.example.ticketbookingapp.repositories.TicketTypeRepository
 import jakarta.persistence.EntityManager
 import jakarta.persistence.LockModeType
 import jakarta.persistence.PersistenceContext

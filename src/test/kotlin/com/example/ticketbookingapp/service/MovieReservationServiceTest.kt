@@ -3,6 +3,10 @@
 import com.example.ticketbookingapp.exceptions.*
 import com.example.ticketbookingapp.config.CustomConfigProperties
 import com.example.ticketbookingapp.domain.*
+import com.example.ticketbookingapp.repositories.MovieScreeningRepository
+import com.example.ticketbookingapp.repositories.ScreeningRoomRepository
+import com.example.ticketbookingapp.repositories.SeatRepository
+import com.example.ticketbookingapp.repositories.TicketTypeRepository
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired

@@ -3,7 +3,9 @@
 import com.example.ticketbookingapp.service.MovieReservationService
 import com.example.ticketbookingapp.service.MovieScreeningSeatsService
 import com.example.ticketbookingapp.service.MovieScreeningService
-import com.example.ticketbookingapp.webApi.screening.MovieScreeningDto
+import com.example.ticketbookingapp.webApi.dto.MovieScreeningDto
+import com.example.ticketbookingapp.webApi.screenings.dto.ScreeningSelectionRequestDto
+import com.example.ticketbookingapp.webApi.screenings.dto.ScreeningSelectionResponseDto
 import org.springframework.web.bind.annotation.*
 
 @RestController

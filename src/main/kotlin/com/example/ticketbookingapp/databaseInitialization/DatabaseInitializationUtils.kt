@@ -1,6 +1,7 @@
-﻿package com.example.ticketbookingapp.service.databaseInitialization
+﻿package com.example.ticketbookingapp.databaseInitialization
 
 import com.example.ticketbookingapp.domain.*
+import com.example.ticketbookingapp.repositories.*
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
 import java.time.LocalDateTime

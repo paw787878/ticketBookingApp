@@ -1,4 +1,4 @@
-﻿package com.example.ticketbookingapp.webApi.screening
+﻿package com.example.ticketbookingapp.webApi.dto
 
 import java.time.Instant
 

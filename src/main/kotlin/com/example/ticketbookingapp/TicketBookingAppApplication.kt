@@ -1,8 +1,8 @@
 package com.example.ticketbookingapp
 
 import com.example.ticketbookingapp.config.CustomConfigProperties
-import com.example.ticketbookingapp.service.databaseInitialization.DatabaseInitializationForTest
-import com.example.ticketbookingapp.service.databaseInitialization.DatabaseInitializationService
+import com.example.ticketbookingapp.databaseInitialization.DatabaseInitializationForTest
+import com.example.ticketbookingapp.databaseInitialization.DatabaseInitializationService
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.EnableConfigurationProperties

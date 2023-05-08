@@ -1,8 +1,12 @@
 ﻿package com.example.ticketbookingapp.webApi.screening
 
-import com.example.ticketbookingapp.domain.MovieScreeningRepository
+import com.example.ticketbookingapp.repositories.MovieScreeningRepository
 import com.example.ticketbookingapp.service.MovieScreeningSeatsService
 import com.example.ticketbookingapp.utils.findByIdOrClientError
+import com.example.ticketbookingapp.webApi.dto.MovieScreeningDto
+import com.example.ticketbookingapp.webApi.screening.dto.MovieScreeningAndRoomDto
+import com.example.ticketbookingapp.webApi.screening.dto.ScreeningInfoRequestDto
+import com.example.ticketbookingapp.webApi.screening.dto.SeatDto
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
 

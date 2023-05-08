@@ -1,6 +1,7 @@
 ﻿package com.example.ticketbookingapp.service
 
 import com.example.ticketbookingapp.domain.*
+import com.example.ticketbookingapp.repositories.MovieScreeningRepository
 import jakarta.persistence.EntityManager
 import jakarta.persistence.PersistenceContext
 import org.springframework.transaction.annotation.Transactional

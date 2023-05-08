@@ -1,4 +1,4 @@
-﻿package com.example.ticketbookingapp.domain.validation
+﻿package com.example.ticketbookingapp.validation
 
 import jakarta.validation.Constraint
 import jakarta.validation.ConstraintValidator

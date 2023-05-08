@@ -1,9 +1,14 @@
 ﻿package com.example.ticketbookingapp.webApi.createReservation
 
 import com.example.ticketbookingapp.domain.*
+import com.example.ticketbookingapp.repositories.MovieScreeningRepository
+import com.example.ticketbookingapp.repositories.SeatRepository
+import com.example.ticketbookingapp.repositories.TicketTypeRepository
 import com.example.ticketbookingapp.service.MovieReservationService
 import com.example.ticketbookingapp.service.SeatTicketType
 import com.example.ticketbookingapp.utils.findByIdOrClientError
+import com.example.ticketbookingapp.webApi.createReservation.dto.ReservationRequestDto
+import com.example.ticketbookingapp.webApi.createReservation.dto.ReservationResponseDto
 import org.springframework.http.HttpStatus
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*

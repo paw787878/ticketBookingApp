@@ -1,4 +1,4 @@
-﻿package com.example.ticketbookingapp.webApi.screenings
+﻿package com.example.ticketbookingapp.webApi.screenings.dto
 
 import org.springframework.format.annotation.DateTimeFormat
 import java.time.Instant

@@ -1,4 +1,6 @@
-﻿package com.example.ticketbookingapp.webApi.screening
+﻿package com.example.ticketbookingapp.webApi.screening.dto
+
+import com.example.ticketbookingapp.webApi.dto.MovieScreeningDto
 
 data class MovieScreeningAndRoomDto(
     val movieScreening: MovieScreeningDto,

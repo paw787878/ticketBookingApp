@@ -1,5 +1,6 @@
 ﻿package com.example.ticketbookingapp.domain
 
+import com.example.ticketbookingapp.repositories.MovieScreeningRepository
 import org.hibernate.Hibernate
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired

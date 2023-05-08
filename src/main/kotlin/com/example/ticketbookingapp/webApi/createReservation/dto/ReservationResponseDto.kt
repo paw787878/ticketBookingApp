@@ -1,4 +1,4 @@
-﻿package com.example.ticketbookingapp.webApi.createReservation
+﻿package com.example.ticketbookingapp.webApi.createReservation.dto
 
 import java.math.BigDecimal
 import java.time.Instant

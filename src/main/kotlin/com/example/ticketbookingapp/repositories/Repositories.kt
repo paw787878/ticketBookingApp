@@ -1,5 +1,6 @@
-﻿package com.example.ticketbookingapp.domain
+﻿package com.example.ticketbookingapp.repositories
 
+import com.example.ticketbookingapp.domain.*
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface MovieRepository : JpaRepository<Movie, Long>
