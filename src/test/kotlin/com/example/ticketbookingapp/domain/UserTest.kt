@@ -8,8 +8,7 @@ import kotlin.test.assertTrue
 
 internal class UserTest {
     private fun getValidator(): Validator {
-        val validator = Validation.buildDefaultValidatorFactory().validator;
-        return validator
+        return Validation.buildDefaultValidatorFactory().validator
     }
 
     @Test

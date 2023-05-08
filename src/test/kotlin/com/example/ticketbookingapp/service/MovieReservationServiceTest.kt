@@ -24,7 +24,7 @@ import kotlin.test.assertEquals
 internal class MovieReservationServiceTest {
 
     @Autowired
-    lateinit var reservationService: MovieReservationService;
+    lateinit var reservationService: MovieReservationService
 
     @Autowired
     lateinit var seatsService: MovieScreeningSeatsService

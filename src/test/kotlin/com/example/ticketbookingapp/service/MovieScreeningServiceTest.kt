@@ -17,7 +17,7 @@ import kotlin.test.assertTrue
 internal class MovieScreeningServiceTest {
 
     @Autowired
-    lateinit var movieScreeningService: MovieScreeningService;
+    lateinit var movieScreeningService: MovieScreeningService
 
     fun getInstantFromHour(hour: Int, minute: Int): Instant {
         return LocalDateTime.of(2000, 1, 1, hour, minute, 0)
@@ -50,7 +50,7 @@ internal class MovieScreeningServiceTest {
 
 
     fun getNumberOfScreeningsInPeriod(startTime: Instant, endTime: Instant): Int {
-        val (screenings, count) = movieScreeningService.getScreeningsInPeriod(startTime,
+        val (screenings, _) = movieScreeningService.getScreeningsInPeriod(startTime,
             endTime, 0, Int.MAX_VALUE)
         return screenings.count()
     }

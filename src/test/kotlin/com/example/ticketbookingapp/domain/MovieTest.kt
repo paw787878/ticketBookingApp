@@ -10,7 +10,7 @@ import kotlin.test.assertTrue
 
 @SpringBootTest
 @ActiveProfiles("test")
-class MovieTest() {
+class MovieTest {
 
     @Autowired
     private lateinit var movieScreeningRepository: MovieScreeningRepository
