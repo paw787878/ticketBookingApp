@@ -14,27 +14,27 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 class CustomGlobalExceptionHandler : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(ClientResponseException::class)
-    fun customHandleNotFound(ex : ClientResponseException, request: WebRequest): ResponseEntity<String> {
-
-        return ResponseEntity(ex.message, ex.responseStatus);
+    fun customHandleNotFound(ex : ClientResponseException, request: WebRequest): ResponseEntity<ApiError> {
+        return ResponseEntity(ApiError(ex.responseStatus, ex.message), ex.responseStatus);
     }
 
     @ExceptionHandler(TransactionSystemException::class)
-    fun customHandleNotFound(ex : TransactionSystemException, request: WebRequest): ResponseEntity<String> {
+    fun customHandleNotFound(ex : TransactionSystemException, request: WebRequest): ResponseEntity<ApiError> {
         (ex.cause?.cause as? ConstraintViolationException)?.let { constraintViolationException ->
             val message = constraintViolationException.constraintViolations.joinToString(separator = "\n") { violation ->
                 "${violation.invalidValue.toString()} should satisfy ${violation.message}"
             }
-            // TODO_PAWEL add test for this
-            return ResponseEntity(message, HttpStatus.BAD_REQUEST);
+            val httpStatus = HttpStatus.BAD_REQUEST
+            return ResponseEntity(ApiError(httpStatus, message), httpStatus);
         }
 
-        // TODO_PAWEL return json with http status in field
-        return ResponseEntity("Database transaction exception", HttpStatus.INTERNAL_SERVER_ERROR);
+        val serverError = HttpStatus.INTERNAL_SERVER_ERROR
+        return ResponseEntity(ApiError(serverError, "Database transaction exception"), serverError);
     }
 
     @ExceptionHandler(ObjectOptimisticLockingFailureException::class)
-    fun customHandleNotFound(ex : ObjectOptimisticLockingFailureException, request: WebRequest): ResponseEntity<String> {
-        return ResponseEntity("Data on which this request was working was changed. Try again", HttpStatus.INTERNAL_SERVER_ERROR)
+    fun customHandleNotFound(ex : ObjectOptimisticLockingFailureException, request: WebRequest): ResponseEntity<ApiError> {
+        val status = HttpStatus.INTERNAL_SERVER_ERROR
+        return ResponseEntity(ApiError(status, "Data on which this request was working was changed. Try again"), status)
     }
 }
