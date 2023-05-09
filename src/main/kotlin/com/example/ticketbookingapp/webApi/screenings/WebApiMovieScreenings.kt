@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.*
 @CrossOrigin(origins = ["*"])
 class WebApiMovieScreenings(
     private val movieScreeningService: MovieScreeningService,
-    private val seatsService: MovieScreeningSeatsService,
-    private val movieReservationService: MovieReservationService,
 ) {
 
     @GetMapping("/screenings")
