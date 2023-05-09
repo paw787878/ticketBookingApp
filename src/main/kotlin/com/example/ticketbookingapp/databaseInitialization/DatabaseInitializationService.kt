@@ -44,38 +44,6 @@ class DatabaseInitializationService(
 
         // to make sure ids of movie screenings are accessible
         entityManager.flush()
-
-        val instantNow = Instant.now()
-
-        reservationService.createReservation(
-            screening_1_1,
-            User(
-                "Name",
-                "Surname",
-            ),
-            screening_1_1.screeningRoom.seats
-                .filter { seat -> seat.columnName == "3" }
-                .map { e -> SeatAndTicketType(e, studentTicketType) }, instantNow)
-
-        reservationService.createReservation(
-            screening_1_1,
-            User(
-                "Namee",
-                "Surnamee",
-            ),
-            screening_1_1.screeningRoom.seats
-                .filter { seat -> seat.columnName == "6" }
-                .map { e -> SeatAndTicketType(e, adultTicketType) }, instantNow)
-
-        reservationService.createReservation(
-            screening_1_2,
-            User(
-                "Nameee",
-                "Surnameee",
-            ),
-            screening_1_2.screeningRoom.seats
-                .filter { seat -> seat.columnName == "7" }
-                .map { e -> SeatAndTicketType(e, childTicketType) }, instantNow)
     }
 
     private fun initializeScreening(
