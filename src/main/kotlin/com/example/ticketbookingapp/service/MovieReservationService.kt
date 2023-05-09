@@ -30,7 +30,7 @@ class MovieReservationService(
     fun createReservation(
         movieScreening: MovieScreening,
         user: User,
-        seatsAndTicketTypes: List<SeatTicketType>,
+        seatsAndTicketTypes: List<SeatAndTicketType>,
         currentTime: Instant
     ): ReservationAndPrice {
 
@@ -131,7 +131,7 @@ class MovieReservationService(
     }
 }
 
-data class SeatTicketType(
+data class SeatAndTicketType(
     val seat: Seat,
     val ticketType: TicketType,
 )

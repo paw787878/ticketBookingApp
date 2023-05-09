@@ -120,7 +120,7 @@ internal class MovieReservationServiceTest {
         val movieScreening = movieScreeningRepository.findById(1).get()
         return reservationService.createReservation(
             movieScreening, User("Pawel", "Surname"),
-                seatIds.map { seat -> SeatTicketType(
+                seatIds.map { seat -> SeatAndTicketType(
                     seatRepository.findById(seat).get()
                     , ticketTypeRepository.findById(1).get()) }
             ,

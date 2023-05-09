@@ -5,7 +5,7 @@ import com.example.ticketbookingapp.repositories.MovieScreeningRepository
 import com.example.ticketbookingapp.repositories.SeatRepository
 import com.example.ticketbookingapp.repositories.TicketTypeRepository
 import com.example.ticketbookingapp.service.MovieReservationService
-import com.example.ticketbookingapp.service.SeatTicketType
+import com.example.ticketbookingapp.service.SeatAndTicketType
 import com.example.ticketbookingapp.utils.findByIdOrClientError
 import com.example.ticketbookingapp.webApi.createReservation.dto.ReservationRequestDto
 import com.example.ticketbookingapp.webApi.createReservation.dto.ReservationResponseDto
@@ -34,7 +34,7 @@ class WebApiCreateReservation(
     fun createReservation(@RequestBody reservationData: ReservationRequestDto): ReservationResponseDto {
         val movieScreening = movieScreeningRepository.findByIdOrClientError(reservationData.movieScreeningId)
         val seatsAndTicketTypes = reservationData.seats.map { e ->
-            SeatTicketType(
+            SeatAndTicketType(
                 seatRepository.findByIdOrClientError(e.seatId),
                 ticketTypeRepository.findByIdOrClientError(e.ticketType)
             )

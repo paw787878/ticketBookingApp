@@ -2,7 +2,7 @@
 
 import com.example.ticketbookingapp.domain.*
 import com.example.ticketbookingapp.service.MovieReservationService
-import com.example.ticketbookingapp.service.SeatTicketType
+import com.example.ticketbookingapp.service.SeatAndTicketType
 import jakarta.persistence.EntityManager
 import jakarta.persistence.PersistenceContext
 import org.springframework.transaction.annotation.Transactional
@@ -55,7 +55,7 @@ class DatabaseInitializationService(
             ),
             screening_1_1.screeningRoom.seats
                 .filter { seat -> seat.columnName == "3" }
-                .map { e -> SeatTicketType(e, studentTicketType) }, instantNow)
+                .map { e -> SeatAndTicketType(e, studentTicketType) }, instantNow)
 
         reservationService.createReservation(
             screening_1_1,
@@ -65,7 +65,7 @@ class DatabaseInitializationService(
             ),
             screening_1_1.screeningRoom.seats
                 .filter { seat -> seat.columnName == "6" }
-                .map { e -> SeatTicketType(e, adultTicketType) }, instantNow)
+                .map { e -> SeatAndTicketType(e, adultTicketType) }, instantNow)
 
         reservationService.createReservation(
             screening_1_2,
@@ -75,7 +75,7 @@ class DatabaseInitializationService(
             ),
             screening_1_2.screeningRoom.seats
                 .filter { seat -> seat.columnName == "7" }
-                .map { e -> SeatTicketType(e, childTicketType) }, instantNow)
+                .map { e -> SeatAndTicketType(e, childTicketType) }, instantNow)
     }
 
     private fun initializeScreening(

@@ -2,7 +2,7 @@
 
 import com.example.ticketbookingapp.domain.*
 import com.example.ticketbookingapp.service.MovieReservationService
-import com.example.ticketbookingapp.service.SeatTicketType
+import com.example.ticketbookingapp.service.SeatAndTicketType
 import jakarta.persistence.EntityManager
 import jakarta.persistence.PersistenceContext
 import org.springframework.transaction.annotation.Transactional
@@ -52,7 +52,7 @@ class DatabaseInitializationForTest(
             User("Name", "Surname"),
             screening_1_1.screeningRoom.seats
                 .filter { seat -> seat.columnName == "1" }
-                .map { e -> SeatTicketType(e, studentTicketType) },
+                .map { e -> SeatAndTicketType(e, studentTicketType) },
             instantInThePast
         )
 
@@ -64,7 +64,7 @@ class DatabaseInitializationForTest(
             ),
             screening_1_1.screeningRoom.seats
                 .filter { seat -> seat.columnName == "4" }
-                .map { e -> SeatTicketType(e, adultTicketType) },
+                .map { e -> SeatAndTicketType(e, adultTicketType) },
             instantInThePast
         )
 
@@ -76,7 +76,7 @@ class DatabaseInitializationForTest(
             ),
             screening_1_2.screeningRoom.seats
                 .filter { seat -> seat.columnName == "5" }
-                .map { e -> SeatTicketType(e, childTicketType) },
+                .map { e -> SeatAndTicketType(e, childTicketType) },
             instantInThePast
         )
 
@@ -88,7 +88,7 @@ class DatabaseInitializationForTest(
             ),
             screening_2_2.screeningRoom.seats
                 .filter { seat -> seat.columnName == "2" }
-                .map { e -> SeatTicketType(e, childTicketType) },
+                .map { e -> SeatAndTicketType(e, childTicketType) },
             instantInThePast
         )
     }
