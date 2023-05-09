@@ -20,19 +20,19 @@ class FirstLetterIsCapitalValidator : ConstraintValidator<FirstLetterIsCapital, 
         if (value == null)
             return false
 
-        return wordIsCapitalized(value)
+        return isCapitalizedWord(value)
     }
 }
 
-private fun wordIsCapitalized(value: String): Boolean {
-    if (value.isEmpty())
+private fun isCapitalizedWord(word: String): Boolean {
+    if (word.isEmpty())
         return false
 
-    if (!value[0].isUpperCase())
+    if (!word[0].isUpperCase())
         return false
 
-    for (i in 1 until value.length) {
-        if (!value[i].isLowerCase())
+    for (i in 1 until word.length) {
+        if (!word[i].isLowerCase())
             return false
     }
 
@@ -48,7 +48,8 @@ annotation class CapitalizedWordOrTwoCapitalizedWordsWithHyphen(
     val message: String = "Should be capitalized word or two capitalized words separated by hyphen"
 )
 
-class CapitalizedWordOrTwoCapitalizedWordsWithHyphenValidator : ConstraintValidator<CapitalizedWordOrTwoCapitalizedWordsWithHyphen, String> {
+class CapitalizedWordOrTwoCapitalizedWordsWithHyphenValidator :
+    ConstraintValidator<CapitalizedWordOrTwoCapitalizedWordsWithHyphen, String> {
     override fun isValid(value: String?, context: ConstraintValidatorContext?): Boolean {
         if (value == null) return false
 
@@ -59,12 +60,12 @@ class CapitalizedWordOrTwoCapitalizedWordsWithHyphenValidator : ConstraintValida
         }
 
         if (split.count() == 1) {
-            return wordIsCapitalized(split[0])
+            return isCapitalizedWord(split[0])
         }
 
         if (split.count() == 2) {
             val (word1, word2) = split
-            return wordIsCapitalized(word1) && wordIsCapitalized(word2)
+            return isCapitalizedWord(word1) && isCapitalizedWord(word2)
         }
 
         return false

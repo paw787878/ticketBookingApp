@@ -22,28 +22,29 @@ class MovieScreeningService {
         endOfPeriod: Instant,
         offset: Int,
         limit: Int
-    ): Pair<List<MovieScreening>, Long> {
+    ): FoundMovieScreeningsAndTotalNumberOfScreenings {
 
         val cb = entityManager.criteriaBuilder
 
-        fun <T> CriteriaQuery<T>.addWhereInInterval(i: Root<MovieScreening>) =
+        fun <T> CriteriaQuery<T>.addWhereInInterval(movieScreeningRoot: Root<MovieScreening>) =
             where(
                 cb.and(
-                    cb.greaterThanOrEqualTo(i.get(MovieScreening_.timeOfStart), beginningOfPeriod),
-                    cb.lessThanOrEqualTo(i.get(MovieScreening_.timeOfEnd), endOfPeriod)
+                    cb.greaterThanOrEqualTo(movieScreeningRoot.get(MovieScreening_.timeOfStart), beginningOfPeriod),
+                    cb.lessThanOrEqualTo(movieScreeningRoot.get(MovieScreening_.timeOfEnd), endOfPeriod)
                 )
             )
 
         val list: List<MovieScreening> = run {
             val criteria = cb.createQuery(MovieScreening::class.java)
-            val i = criteria.from(MovieScreening::class.java)
+            val movieScreeningRoot = criteria.from(MovieScreening::class.java)
 
             criteria
-                .select(i)
-                .addWhereInInterval(i)
+                .select(movieScreeningRoot)
+                .addWhereInInterval(movieScreeningRoot)
                 .orderBy(
-                    cb.asc(i.get(MovieScreening_.movie).get(Movie_.title)),
-                    cb.asc(i.get(MovieScreening_.timeOfStart))
+                    cb.asc(movieScreeningRoot.get(MovieScreening_.movie).get(Movie_.title)),
+                    cb.asc(movieScreeningRoot.get(MovieScreening_.timeOfStart)),
+                    cb.asc(movieScreeningRoot.get(MovieScreening_.id))
                 )
 
             val query = entityManager.createQuery(criteria)
@@ -66,6 +67,11 @@ class MovieScreeningService {
             query.singleResult
         }
 
-        return Pair(list, count)
+        return FoundMovieScreeningsAndTotalNumberOfScreenings(list, count.toInt())
     }
 }
+
+data class FoundMovieScreeningsAndTotalNumberOfScreenings(
+    val movieScreenings: List<MovieScreening>,
+    val totalNumberOfScreenings: Int,
+)

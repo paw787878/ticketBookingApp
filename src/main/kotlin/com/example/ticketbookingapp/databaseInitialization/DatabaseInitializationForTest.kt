@@ -53,7 +53,8 @@ class DatabaseInitializationForTest(
             screening_1_1.screeningRoom.seats
                 .filter { seat -> seat.columnName == "1" }
                 .map { e -> SeatTicketType(e, studentTicketType) },
-            instantInThePast)
+            instantInThePast
+        )
 
         reservationService.createReservation(
             screening_1_1,
@@ -64,7 +65,8 @@ class DatabaseInitializationForTest(
             screening_1_1.screeningRoom.seats
                 .filter { seat -> seat.columnName == "4" }
                 .map { e -> SeatTicketType(e, adultTicketType) },
-            instantInThePast)
+            instantInThePast
+        )
 
         reservationService.createReservation(
             screening_1_2,
@@ -87,7 +89,8 @@ class DatabaseInitializationForTest(
             screening_2_2.screeningRoom.seats
                 .filter { seat -> seat.columnName == "2" }
                 .map { e -> SeatTicketType(e, childTicketType) },
-            instantInThePast)
+            instantInThePast
+        )
     }
 
     private fun initializeScreening(

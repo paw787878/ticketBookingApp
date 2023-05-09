@@ -12,7 +12,7 @@ abstract class ClientResponseException : RuntimeException() {
 }
 
 class ClientResponseExceptionEntityIdIsWrong(val id: Long, private val entityType: Class<*>) : ClientResponseException() {
-    override fun messageImplementation() = "$id is wrong id for ${entityType.simpleName}"
+    override fun messageImplementation() = "There is no ${entityType.simpleName} with id = $id"
 }
 
 class ClientResponseExceptionEntityNoSeatsInReservation : ClientResponseException() {

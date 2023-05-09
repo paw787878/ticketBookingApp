@@ -14,16 +14,23 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 class CustomGlobalExceptionHandler : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(ClientResponseException::class)
-    fun customHandleNotFound(ex : ClientResponseException, request: WebRequest): ResponseEntity<ApiError> {
+    fun customHandleClientResponseException(
+        ex: ClientResponseException,
+        request: WebRequest
+    ): ResponseEntity<ApiError> {
         return ResponseEntity(ApiError(ex.responseStatus, ex.message), ex.responseStatus)
     }
 
     @ExceptionHandler(TransactionSystemException::class)
-    fun customHandleNotFound(ex : TransactionSystemException, request: WebRequest): ResponseEntity<ApiError> {
+    fun customHandleTransactionSystemException(
+        ex: TransactionSystemException,
+        request: WebRequest
+    ): ResponseEntity<ApiError> {
         (ex.cause?.cause as? ConstraintViolationException)?.let { constraintViolationException ->
-            val message = constraintViolationException.constraintViolations.joinToString(separator = "\n") { violation ->
-                "${violation.invalidValue} should satisfy ${violation.message}"
-            }
+            val message =
+                constraintViolationException.constraintViolations.joinToString(separator = "\n") { violation ->
+                    "${violation.invalidValue} should satisfy ${violation.message}"
+                }
             val httpStatus = HttpStatus.BAD_REQUEST
             return ResponseEntity(ApiError(httpStatus, message), httpStatus)
         }
@@ -33,7 +40,10 @@ class CustomGlobalExceptionHandler : ResponseEntityExceptionHandler() {
     }
 
     @ExceptionHandler(ObjectOptimisticLockingFailureException::class)
-    fun customHandleNotFound(ex : ObjectOptimisticLockingFailureException, request: WebRequest): ResponseEntity<ApiError> {
+    fun customHandleTransactionSystemException(
+        ex: ObjectOptimisticLockingFailureException,
+        request: WebRequest
+    ): ResponseEntity<ApiError> {
         val status = HttpStatus.INTERNAL_SERVER_ERROR
         return ResponseEntity(ApiError(status, "Data on which this request was working was changed. Try again"), status)
     }

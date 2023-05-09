@@ -26,13 +26,15 @@ class WebApiMovieScreenings(
         val (list, count) = movieScreeningService.getScreeningsInPeriod(
             dto.minimalStartTime,
             dto.maximalEndTime,
-            dto.offset, dto.limit
+            dto.offset,
+            dto.limit
         )
 
         return ScreeningSelectionResponseDto(
             list.map { e ->
                 MovieScreeningDto(e.id, e.movie.title, starts = e.timeOfStart, ends = e.timeOfEnd)
             },
-            count)
+            count
+        )
     }
 }

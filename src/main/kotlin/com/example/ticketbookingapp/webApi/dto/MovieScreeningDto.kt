@@ -7,4 +7,4 @@ data class MovieScreeningDto(
     val title: String,
     val starts: Instant,
     val ends: Instant,
-    )
+)

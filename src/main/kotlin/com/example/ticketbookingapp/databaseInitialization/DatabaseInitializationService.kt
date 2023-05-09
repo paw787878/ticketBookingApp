@@ -55,8 +55,7 @@ class DatabaseInitializationService(
             ),
             screening_1_1.screeningRoom.seats
                 .filter { seat -> seat.columnName == "3" }
-                .map { e -> SeatTicketType(e, studentTicketType) }
-        , instantNow)
+                .map { e -> SeatTicketType(e, studentTicketType) }, instantNow)
 
         reservationService.createReservation(
             screening_1_1,
@@ -66,8 +65,7 @@ class DatabaseInitializationService(
             ),
             screening_1_1.screeningRoom.seats
                 .filter { seat -> seat.columnName == "6" }
-                .map { e -> SeatTicketType(e, adultTicketType) }
-        , instantNow)
+                .map { e -> SeatTicketType(e, adultTicketType) }, instantNow)
 
         reservationService.createReservation(
             screening_1_2,
@@ -77,14 +75,19 @@ class DatabaseInitializationService(
             ),
             screening_1_2.screeningRoom.seats
                 .filter { seat -> seat.columnName == "7" }
-                .map { e -> SeatTicketType(e, childTicketType) }
-        , instantNow)
+                .map { e -> SeatTicketType(e, childTicketType) }, instantNow)
     }
 
     private fun initializeScreening(
         screeningRoom: ScreeningRoom,
         movie: Movie,
-        hour: Int): MovieScreening {
-        return databaseInitializationUtils.initializeScreening(screeningRoom, movie, LocalDateTime.of(2100, 1, 1, hour, 0, 0), 30)
+        hour: Int
+    ): MovieScreening {
+        return databaseInitializationUtils.initializeScreening(
+            screeningRoom,
+            movie,
+            LocalDateTime.of(2100, 1, 1, hour, 0, 0),
+            30
+        )
     }
 }

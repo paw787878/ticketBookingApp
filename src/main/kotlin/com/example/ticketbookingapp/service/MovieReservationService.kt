@@ -27,20 +27,19 @@ class MovieReservationService(
     private lateinit var entityManager: EntityManager
 
     @Transactional(rollbackFor = [Exception::class])
-    fun createReservation(movieScreening: MovieScreening, user: User, seatsAndTicketTypes: List<SeatTicketType>, currentTime: Instant): ReservationAndPrice {
+    fun createReservation(
+        movieScreening: MovieScreening,
+        user: User,
+        seatsAndTicketTypes: List<SeatTicketType>,
+        currentTime: Instant
+    ): ReservationAndPrice {
+
         if (seatsAndTicketTypes.isEmpty()) {
             throw ClientResponseExceptionEntityNoSeatsInReservation()
         }
-        run {
-            val minimalTimeBetweenBookingAndScreeningStart =
-                customConfigProperties.minimalTimeBetweenBookingAndScreeningStart
-            val maximalTimeWhenOneCanBook = movieScreening.timeOfStart.minusSeconds(
-                (60).toLong() * minimalTimeBetweenBookingAndScreeningStart
-            )
-            if (currentTime > maximalTimeWhenOneCanBook) {
-                throw ClientResponseExceptionReservationIsPlacedTooLate(minimalTimeBetweenBookingAndScreeningStart)
-            }
-        }
+
+        requireReservationIsNotPlacedTooLate(movieScreening, currentTime)
+
         entityManager.lock(movieScreening, LockModeType.OPTIMISTIC_FORCE_INCREMENT)
 
         val roomSeats = movieScreening.screeningRoom.seats
@@ -64,23 +63,9 @@ class MovieReservationService(
             if (chosenSeat !in roomSeats) {
                 throw ClientResponseExceptionSelectedSeatFromWrongScreeningRoom(chosenSeat.id)
             }
-            fun checkNeighbour(neighbour: Seat?) {
-                neighbour ?: return
-
-                fun isOrWillBeReserved(seat: Seat?) =
-                    seat?.let { it in reservedSeats || it in chosenSeats } ?: false
-
-                if (!isOrWillBeReserved(neighbour) &&
-                    isOrWillBeReserved(neighbour.seatToLeft) &&
-                    isOrWillBeReserved(neighbour.seatToRight)
-                ) {
-                    throw ClientResponseExceptionWouldLeaveSingleSeatSurrounded(neighbour.id)
-                }
-            }
-
-            checkNeighbour(chosenSeat.seatToLeft)
-            checkNeighbour(chosenSeat.seatToRight)
         }
+
+        requireNoEmptySeatLeftBetweenReservedSeats(chosenSeats, reservedSeats)
 
         val reservation = Reservation(
             user,
@@ -93,12 +78,56 @@ class MovieReservationService(
         for (ticketSeat in seatsAndTicketTypes) {
             val ticketType = ticketSeat.ticketType
             val seat = ticketSeat.seat
-            ticketTypeRepository
             ReservationSeat(reservation, seat, ticketType).let { reservationSeatRepository.save(it) }
             amountToPay += ticketType.price
         }
 
         return ReservationAndPrice(reservation, amountToPay)
+    }
+
+    private fun requireNoEmptySeatLeftBetweenReservedSeats(
+        chosenSeats: Set<Seat>,
+        reservedSeats: Set<Seat>,
+    ) {
+        val futureReservedSeats = chosenSeats.union(reservedSeats)
+        for (chosenSeat in chosenSeats) {
+
+            chosenSeat.seatToLeft?.let {
+                requireIsNotEmptySeatSurroundedByReserved(it, futureReservedSeats)
+            }
+            chosenSeat.seatToRight?.let {
+                requireIsNotEmptySeatSurroundedByReserved(it, futureReservedSeats)
+            }
+        }
+    }
+
+    private fun requireIsNotEmptySeatSurroundedByReserved(
+        seat: Seat,
+        futureReservedSeats: Set<Seat>,
+    ) {
+        fun isOrWillBeReserved(seat: Seat?) =
+            seat?.let { it in futureReservedSeats } ?: false
+
+        if (!isOrWillBeReserved(seat) &&
+            isOrWillBeReserved(seat.seatToLeft) &&
+            isOrWillBeReserved(seat.seatToRight)
+        ) {
+            throw ClientResponseExceptionWouldLeaveSingleSeatSurrounded(seat.id)
+        }
+    }
+
+    private fun requireReservationIsNotPlacedTooLate(
+        movieScreening: MovieScreening,
+        currentTime: Instant
+    ) {
+        val minimalTimeBetweenBookingAndScreeningStart =
+            customConfigProperties.minimalTimeBetweenBookingAndScreeningStart
+        val maximalTimeWhenOneCanBook = movieScreening.timeOfStart.minusSeconds(
+            (60).toLong() * minimalTimeBetweenBookingAndScreeningStart
+        )
+        if (currentTime > maximalTimeWhenOneCanBook) {
+            throw ClientResponseExceptionReservationIsPlacedTooLate(minimalTimeBetweenBookingAndScreeningStart)
+        }
     }
 }
 

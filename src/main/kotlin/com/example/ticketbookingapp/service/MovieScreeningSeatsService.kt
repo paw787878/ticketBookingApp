@@ -1,14 +1,13 @@
 ﻿package com.example.ticketbookingapp.service
 
 import com.example.ticketbookingapp.domain.*
-import com.example.ticketbookingapp.repositories.MovieScreeningRepository
 import jakarta.persistence.EntityManager
 import jakarta.persistence.PersistenceContext
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.stereotype.Service
 
 @Service
-class MovieScreeningSeatsService(private val movieScreeningRepository: MovieScreeningRepository) {
+class MovieScreeningSeatsService {
 
     @PersistenceContext
     private lateinit var entityManager: EntityManager
@@ -31,17 +30,17 @@ class MovieScreeningSeatsService(private val movieScreeningRepository: MovieScre
     }
 
     @Transactional(rollbackFor = [Exception::class], readOnly = true)
-    fun getSeatInfos(movieScreening: MovieScreening): List<SeatAvailability> {
+    fun getSeatInfos(movieScreening: MovieScreening): List<SeatAndAvailability> {
         val reservedSeats = getReservedSeats(movieScreening).toSet()
         val allSeats = movieScreening.screeningRoom.seats
 
         return allSeats.map { seat ->
-            SeatAvailability(seat, seat !in reservedSeats)
+            SeatAndAvailability(seat, seat !in reservedSeats)
         }
     }
 }
 
-data class SeatAvailability(
+data class SeatAndAvailability(
     val seat: Seat,
-    val available : Boolean,
+    val available: Boolean,
 )

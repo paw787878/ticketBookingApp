@@ -32,7 +32,7 @@ internal class MovieScreeningServiceTest {
             getInstantFromHour(23, 30), 0, Int.MAX_VALUE)
 
         assertEquals(count, 6)
-        assertEquals(count, screenings.count().toLong())
+        assertEquals(count, screenings.count())
 
         fun compareScreenings(movieScreening1: MovieScreening, movieScreening2: MovieScreening): Int {
             val cmp1 = movieScreening1.movie.title.compareTo(movieScreening2.movie.title)
