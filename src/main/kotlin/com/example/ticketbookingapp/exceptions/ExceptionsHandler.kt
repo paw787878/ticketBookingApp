@@ -4,7 +4,6 @@ import jakarta.validation.ConstraintViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.orm.ObjectOptimisticLockingFailureException
-import org.springframework.transaction.TransactionSystemException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.context.request.WebRequest
@@ -21,22 +20,17 @@ class CustomGlobalExceptionHandler : ResponseEntityExceptionHandler() {
         return ResponseEntity(ApiError(ex.responseStatus, ex.message), ex.responseStatus)
     }
 
-    @ExceptionHandler(TransactionSystemException::class)
+    @ExceptionHandler(ConstraintViolationException::class)
     fun customHandleTransactionSystemException(
-        ex: TransactionSystemException,
+        ex: ConstraintViolationException,
         request: WebRequest
     ): ResponseEntity<ApiError> {
-        (ex.cause?.cause as? ConstraintViolationException)?.let { constraintViolationException ->
-            val message =
-                constraintViolationException.constraintViolations.joinToString(separator = "\n") { violation ->
-                    "${violation.invalidValue} should satisfy ${violation.message}"
-                }
-            val httpStatus = HttpStatus.BAD_REQUEST
-            return ResponseEntity(ApiError(httpStatus, message), httpStatus)
-        }
-
-        val serverError = HttpStatus.INTERNAL_SERVER_ERROR
-        return ResponseEntity(ApiError(serverError, "Database transaction exception"), serverError)
+        val message =
+            ex.constraintViolations.joinToString(separator = "\n") { violation ->
+                "${violation.invalidValue} should satisfy ${violation.message}"
+            }
+        val httpStatus = HttpStatus.BAD_REQUEST
+        return ResponseEntity(ApiError(httpStatus, message), httpStatus)
     }
 
     @ExceptionHandler(ObjectOptimisticLockingFailureException::class)

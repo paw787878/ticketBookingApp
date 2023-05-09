@@ -37,6 +37,12 @@ class DatabaseInitializationForTest(
         val screening_1_2 = initializeScreening(room1, movie2, 20)
 
         val screening_2_2 = initializeScreening(room2, movie2, 9)
+        val screening_inFuture = databaseInitializationUtils.initializeScreening(
+                room1,
+                movie1,
+                LocalDateTime.of(2100, 1, 1, 0, 0, 0),
+                30
+            )
         initializeScreening(room2, movie3, 21)
 
         initializeScreening(room3, movie3, 11)

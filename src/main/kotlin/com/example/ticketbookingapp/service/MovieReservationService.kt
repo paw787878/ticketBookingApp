@@ -9,6 +9,7 @@ import com.example.ticketbookingapp.repositories.TicketTypeRepository
 import jakarta.persistence.EntityManager
 import jakarta.persistence.LockModeType
 import jakarta.persistence.PersistenceContext
+import jakarta.validation.Valid
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
@@ -29,7 +30,7 @@ class MovieReservationService(
     @Transactional(rollbackFor = [Exception::class])
     fun createReservation(
         movieScreening: MovieScreening,
-        user: User,
+        @Valid user: User,
         seatsAndTicketTypes: List<SeatAndTicketType>,
         currentTime: Instant
     ): ReservationAndPrice {
@@ -82,6 +83,7 @@ class MovieReservationService(
             amountToPay += ticketType.price
         }
 
+        entityManager.flush()
         return ReservationAndPrice(reservation, amountToPay)
     }
 
