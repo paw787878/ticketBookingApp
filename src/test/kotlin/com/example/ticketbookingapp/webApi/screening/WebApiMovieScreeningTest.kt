@@ -1,5 +1,6 @@
 ﻿package com.example.ticketbookingapp.webApi.screening
 
+import com.example.ticketbookingapp.exceptions.ApiError
 import com.example.ticketbookingapp.webApi.screening.dto.MovieScreeningAndRoomDto
 import org.junit.jupiter.api.Assertions.*
 
@@ -37,5 +38,18 @@ class WebApiMovieScreeningTest {
         val resultObject = objectMapper.readValue(contentAsString, MovieScreeningAndRoomDto::class.java)
 
         assertEquals(resultObject.movieScreening.title, "Schindler's List")
+    }
+
+    @Test
+    @Transactional(rollbackFor = [Exception::class])
+    fun returnsWellFormattedMessageForWrongId() {
+        val requestBuilder = MockMvcRequestBuilders.get ("/api/screening")
+            .accept(MediaType.APPLICATION_JSON)
+            .param("screeningId", "-1")
+        val result = mockMvc.perform(requestBuilder).andReturn();
+        val contentAsString = result.response.contentAsString
+        val resultObject = objectMapper.readValue(contentAsString, ApiError::class.java)
+
+        assertEquals(resultObject.message, "There is no MovieScreening with id = -1")
     }
 }
