@@ -1,8 +1,8 @@
-﻿package com.example.ticketbookingapp.webApi.screenings
+﻿package com.example.ticketbookingapp.webApi.screening
 
+import com.example.ticketbookingapp.webApi.screening.dto.MovieScreeningAndRoomDto
 import org.junit.jupiter.api.Assertions.*
 
-import com.example.ticketbookingapp.webApi.screenings.dto.ScreeningSelectionResponseDto
 import com.fasterxml.jackson.databind.ObjectMapper
 
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-class WebApiMovieScreeningsTest {
+class WebApiMovieScreeningTest {
     @Autowired
     private lateinit var mockMvc: MockMvc;
 
@@ -28,17 +28,14 @@ class WebApiMovieScreeningsTest {
 
     @Test
     @Transactional(rollbackFor = [Exception::class])
-    fun returnsScreenings() {
-        val requestBuilder = MockMvcRequestBuilders.get ("/api/screenings")
+    fun returnsFirstScreening() {
+        val requestBuilder = MockMvcRequestBuilders.get ("/api/screening")
             .accept(MediaType.APPLICATION_JSON)
-            .param("minimalStartTime", "2000-01-01T07:00:00.000+00:00")
-            .param("maximalEndTime", "2000-01-02T23:40:00.000+00:00")
-            .param("offset", "0")
-            .param("limit", "1000")
-        val result = mockMvc . perform (requestBuilder).andReturn();
+            .param("screeningId", "1")
+        val result = mockMvc.perform(requestBuilder).andReturn();
         val contentAsString = result.response.contentAsString
-        val resultObject = objectMapper.readValue(contentAsString, ScreeningSelectionResponseDto::class.java)
+        val resultObject = objectMapper.readValue(contentAsString, MovieScreeningAndRoomDto::class.java)
 
-        assertEquals(resultObject.elements.count(), 6)
+        assertEquals(resultObject.movieScreening.title, "Schindler's List")
     }
 }
