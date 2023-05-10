@@ -1,7 +1,5 @@
 ﻿package com.example.ticketbookingapp.webApi.screenings
 
-import com.example.ticketbookingapp.service.MovieReservationService
-import com.example.ticketbookingapp.service.MovieScreeningSeatsService
 import com.example.ticketbookingapp.service.MovieScreeningService
 import com.example.ticketbookingapp.webApi.dto.MovieScreeningDto
 import com.example.ticketbookingapp.webApi.screenings.dto.ScreeningSelectionRequestDto
@@ -15,7 +13,7 @@ import org.springframework.web.bind.annotation.*
 )
 // cors would be changed in final app
 @CrossOrigin(origins = ["*"])
-class WebApiMovieScreenings(
+class WebApiMovieScreeningsController(
     private val movieScreeningService: MovieScreeningService,
 ) {
 

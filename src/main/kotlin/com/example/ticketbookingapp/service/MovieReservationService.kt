@@ -5,7 +5,6 @@ import com.example.ticketbookingapp.config.CustomConfigProperties
 import com.example.ticketbookingapp.domain.*
 import com.example.ticketbookingapp.repositories.ReservationRepository
 import com.example.ticketbookingapp.repositories.ReservationSeatRepository
-import com.example.ticketbookingapp.repositories.TicketTypeRepository
 import jakarta.persistence.EntityManager
 import jakarta.persistence.LockModeType
 import jakarta.persistence.PersistenceContext
@@ -19,7 +18,6 @@ import java.time.Instant
 class MovieReservationService(
     private val screeningSeatsService: MovieScreeningSeatsService,
     private val reservationRepository: ReservationRepository,
-    private val ticketTypeRepository: TicketTypeRepository,
     private val reservationSeatRepository: ReservationSeatRepository,
     private val customConfigProperties: CustomConfigProperties,
 ) {
@@ -83,7 +81,6 @@ class MovieReservationService(
             amountToPay += ticketType.price
         }
 
-        entityManager.flush()
         return ReservationAndPrice(reservation, amountToPay)
     }
 

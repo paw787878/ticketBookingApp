@@ -21,7 +21,7 @@ import java.time.Instant
 )
 // cors would be changed in final app
 @CrossOrigin(origins = ["*"])
-class WebApiCreateReservation(
+class WebApiCreateReservationController(
     private val movieReservationService: MovieReservationService,
     private val movieScreeningRepository: MovieScreeningRepository,
     private val seatRepository: SeatRepository,

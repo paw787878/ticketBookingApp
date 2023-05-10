@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Assertions.*
 import com.example.ticketbookingapp.webApi.screenings.dto.ScreeningSelectionResponseDto
 import com.fasterxml.jackson.databind.ObjectMapper
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Test
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.http.MediaType
 import org.springframework.test.context.ActiveProfiles
@@ -19,12 +19,12 @@ import org.springframework.transaction.annotation.Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-class WebApiMovieScreeningsTest {
+class WebApiMovieScreeningsControllerTest {
     @Autowired
-    private lateinit var mockMvc: MockMvc;
+    private lateinit var mockMvc: MockMvc
 
     @Autowired
-    private lateinit var objectMapper: ObjectMapper;
+    private lateinit var objectMapper: ObjectMapper
 
     @Test
     @Transactional(rollbackFor = [Exception::class])
@@ -35,7 +35,7 @@ class WebApiMovieScreeningsTest {
             .param("maximalEndTime", "2000-01-02T23:40:00.000+00:00")
             .param("offset", "0")
             .param("limit", "1000")
-        val result = mockMvc . perform (requestBuilder).andReturn();
+        val result = mockMvc.perform (requestBuilder).andReturn()
         val contentAsString = result.response.contentAsString
         val resultObject = objectMapper.readValue(contentAsString, ScreeningSelectionResponseDto::class.java)
 

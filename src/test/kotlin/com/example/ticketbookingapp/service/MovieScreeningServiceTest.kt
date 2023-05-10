@@ -44,7 +44,7 @@ internal class MovieScreeningServiceTest {
         }
 
         for (i in 1 until count) {
-            assertTrue(compareScreenings(screenings[i.toInt() - 1], screenings[i.toInt()]) < 0)
+            assertTrue(compareScreenings(screenings[i - 1], screenings[i]) < 0)
         }
     }
 

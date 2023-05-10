@@ -12,10 +12,10 @@ import com.example.ticketbookingapp.webApi.createReservation.dto.SeatTicketTypeD
 
 import com.fasterxml.jackson.databind.ObjectMapper
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Test
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.http.MediaType
 import org.springframework.mock.web.MockHttpServletResponse
@@ -30,10 +30,10 @@ import org.springframework.transaction.annotation.Transactional
 @ActiveProfiles("test")
 class WebApiCreateReservationTest {
     @Autowired
-    private lateinit var mockMvc: MockMvc;
+    private lateinit var mockMvc: MockMvc
 
     @Autowired
-    private lateinit var objectMapper: ObjectMapper;
+    private lateinit var objectMapper: ObjectMapper
 
     @Autowired
     private lateinit var screeningRepository: MovieScreeningRepository
@@ -88,6 +88,6 @@ class WebApiCreateReservationTest {
                 seats = listOf(SeatTicketTypeDto(seat.id, 1))
 
             )))
-        return mockMvc.perform(requestBuilder).andReturn().response;
+        return mockMvc.perform(requestBuilder).andReturn().response
     }
 }

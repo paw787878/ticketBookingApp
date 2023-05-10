@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Assertions.*
 
 import com.fasterxml.jackson.databind.ObjectMapper
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Test
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.http.MediaType
 import org.springframework.test.context.ActiveProfiles
@@ -20,12 +20,12 @@ import org.springframework.transaction.annotation.Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-class WebApiMovieScreeningTest {
+class WebApiMovieScreeningControllerTest {
     @Autowired
-    private lateinit var mockMvc: MockMvc;
+    private lateinit var mockMvc: MockMvc
 
     @Autowired
-    private lateinit var objectMapper: ObjectMapper;
+    private lateinit var objectMapper: ObjectMapper
 
     @Test
     @Transactional(rollbackFor = [Exception::class])
@@ -33,7 +33,7 @@ class WebApiMovieScreeningTest {
         val requestBuilder = MockMvcRequestBuilders.get ("/api/screening")
             .accept(MediaType.APPLICATION_JSON)
             .param("screeningId", "1")
-        val result = mockMvc.perform(requestBuilder).andReturn();
+        val result = mockMvc.perform(requestBuilder).andReturn()
         val contentAsString = result.response.contentAsString
         val resultObject = objectMapper.readValue(contentAsString, MovieScreeningAndRoomDto::class.java)
 
@@ -46,7 +46,7 @@ class WebApiMovieScreeningTest {
         val requestBuilder = MockMvcRequestBuilders.get ("/api/screening")
             .accept(MediaType.APPLICATION_JSON)
             .param("screeningId", "-1")
-        val result = mockMvc.perform(requestBuilder).andReturn();
+        val result = mockMvc.perform(requestBuilder).andReturn()
         val contentAsString = result.response.contentAsString
         val resultObject = objectMapper.readValue(contentAsString, ApiError::class.java)
 

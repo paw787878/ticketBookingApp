@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*
 )
 // cors would be changed in final app
 @CrossOrigin(origins = ["*"])
-class WebApiMovieScreening(
+class WebApiMovieScreeningController(
     private val seatsService: MovieScreeningSeatsService,
     private val screeningRepository: MovieScreeningRepository,
 ) {

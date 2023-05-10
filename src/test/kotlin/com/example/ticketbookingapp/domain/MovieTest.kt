@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.transaction.annotation.Transactional
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 @SpringBootTest
@@ -25,6 +26,6 @@ class MovieTest {
         val proxiedMovie = screening.movie
         assertTrue(proxiedMovie::class.java != Movie::class.java)
         val movie = Hibernate.unproxy(proxiedMovie)
-        assertTrue(movie::class.java == Movie::class.java)
+        assertEquals(movie::class.java, Movie::class.java)
     }
 }
