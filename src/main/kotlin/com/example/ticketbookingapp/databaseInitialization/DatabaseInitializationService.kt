@@ -25,7 +25,7 @@ class DatabaseInitializationService(
         val studentTicketType = databaseInitializationUtils.initializeTicketType("student", BigDecimal("18"))
         val childTicketType = databaseInitializationUtils.initializeTicketType("child", BigDecimal("12.5"))
 
-        val room1 = databaseInitializationUtils.initializeRoom("room 1", 10, 10)
+        val room1 = databaseInitializationUtils.initializeRoom("room 1", 3, 3)
         val room2 = databaseInitializationUtils.initializeRoom("room 2", 15, 15)
         val room3 = databaseInitializationUtils.initializeRoom("room 3", 20, 20)
 
