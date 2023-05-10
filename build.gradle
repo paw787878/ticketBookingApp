@@ -1,11 +1,27 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
+    id "org.jetbrains.kotlin.kapt" version "1.8.21"
     id 'org.springframework.boot' version '3.0.6'
     id 'io.spring.dependency-management' version '1.1.0'
     id 'org.jetbrains.kotlin.jvm' version '1.7.22'
     id 'org.jetbrains.kotlin.plugin.spring' version '1.7.22'
+    id "org.jetbrains.kotlin.plugin.noarg" version "1.8.21"
     id 'org.jetbrains.kotlin.plugin.jpa' version '1.7.22'
+
+    id "org.jetbrains.kotlin.plugin.allopen" version "1.8.21"
+}
+
+noArg {
+  annotation("jakarta.persistence.Entity")
+  annotation("jakarta.persistence.Embeddable")
+  annotation("jakarta.persistence.MappedSuperclass")
+}
+
+allOpen {
+    annotation("jakarta.persistence.Entity")
+    annotation("jakarta.persistence.Embeddable")
+    annotation("jakarta.persistence.MappedSuperclass")
 }
 
 group = 'com.example'
@@ -21,9 +37,13 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
     implementation 'org.jetbrains.kotlin:kotlin-reflect'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.h2database:h2'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.jetbrains.kotlin:kotlin-test-junit:1.8.21'
+
+    kapt "org.hibernate:hibernate-jpamodelgen:6.2.2.Final"
 }
 
 tasks.withType(KotlinCompile) {

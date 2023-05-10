@@ -1,0 +1,11 @@
+{
+  "movieScreeningId": 1,
+  "name": "Pawel",
+  "surname": "Czajka",
+  "seats": [
+    {
+      "seatId": 1,
+      "ticketType": 1
+    }
+  ]
+}
