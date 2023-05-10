@@ -11,10 +11,12 @@ import jakarta.persistence.PersistenceContext
 import jakarta.validation.Valid
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.stereotype.Service
+import org.springframework.validation.annotation.Validated
 import java.math.BigDecimal
 import java.time.Instant
 
 @Service
+@Validated
 class MovieReservationService(
     private val screeningSeatsService: MovieScreeningSeatsService,
     private val reservationRepository: ReservationRepository,
